@@ -1,0 +1,602 @@
+/*
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font: inherit;
+    text-decoration: none;
+    vertical-align: baseline;
+}
+*/
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+html,body {
+    width:100%;height:100%;
+    font: 16px/1.4em 'PT Serif', serif;
+    /* background-color: #E5F7ED; */
+}
+a {
+    text-decoration: none;
+}
+* {
+    padding:0px; margin:0px;
+    box-sizing: border-box;
+}
+ 
+ol, ul {
+    list-style: none;
+}
+
+#all {
+    display: flex;min-height: 100vh;flex-direction: column;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    zoom:1;    /* For IE 6/7 (trigger hasLayout) */
+    box-shadow: 0 1px 2px #999; 
+    background-color:#C5F5DC;
+}
+
+header #logo {
+    float: left;
+    font-size: 27px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    margin: 12px 0 0 26px;
+}
+ 
+header:before,header:after {
+    content:"";
+    display:table;
+}
+header:after {
+    clear:both;
+}
+
+header label {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    margin: 13px 26px 0 0;
+}
+/* --------------------------------mobile-------------------------------- */
+nav {
+    padding-top: 50px; 
+    height: 0;
+    display: block;
+	overflow: hidden;
+}
+nav ul li a {
+    display:block;
+    background-color: #D8FAE8;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold; 
+    padding:11px 0 11px 0 ;
+    text-align: center;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+/* ------------------------------mobile - main----------------------------- */
+
+main {
+    flex: 1;  /* 1 代表盡可能最大，會自動填滿除了 header footer 以外的空間 */
+    margin: 0 0 22px 0;
+} 
+#content {
+    margin: 15px 10px 0 10px;
+}
+
+#content h1{
+    font-size: 1.5em;
+}
+#content h2{
+    font-size: 1.4em;
+}
+#content h3{
+    font-size: 1.3em;
+    font-weight: bold;
+}
+#content h4{
+    font-size: 1.2em;
+}
+#content h5{
+    font-size: 1.1em;
+}
+#content h6{
+    font-size: 1em;
+}
+#content table{
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0 auto;
+}
+#content th{
+    background-color: #ebebeb;
+}
+
+#content th, #content td{
+    border:1px solid #ccc;
+    padding: 5px;
+}
+#content pre {
+    font-family:monospace;
+    overflow:auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#content blockquote {
+    padding: 0 1em;
+    color: #777;
+    border-left: 0.25em solid #ddd
+}
+.content::after {
+        content: "";
+        clear: both;
+        display: table;
+}
+[class*="re-"] {
+    float: left;
+    width: 100%;
+}
+article {
+    /* border: 1px solid #92EEB5; */
+    box-shadow: 0 1px 1px #cccccc;
+    padding: 9px 11px 11px 11px;
+    margin: 0 10px 0px 0;
+    /* box-shadow: 0 3px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
+}
+#top {
+    margin: 0 10px 10px 0;
+    padding: 0 0 4px 0;
+}
+
+article #top #title {
+    margin: -9px -22px 0 -11px;
+    background-color: #D8FAE8;
+    color: #671696;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+article #top #title li {
+    display: inline-block;
+    margin: 10px 0 8px 8px;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+}
+article #top #title li.off {
+    background:#B1F5D1;
+    font-weight:bold;
+}
+article #top #topic #annu {
+    margin: 20px 0 0 0;
+    border-bottom: 1px solid #92EEB5;
+}
+article #top #topic #annu-title {
+    font-size:18px;
+    font-weight: bold;
+}
+article #top #topic #right-info {
+    float:right;
+    margin: 0 -12px 0 0;
+    font-size:14px;
+    font-weight: bold;
+    color:#EC0DBC;
+}
+article #top #topic #info {
+    font-size:14px;
+}
+article #blog #title {
+    font-weight: bold;
+    font-size: 18px;
+}
+article #blog #right-info {
+    float:right;
+    font-size:14px;
+    font-weight: bold;
+    color:#EC0DBC;
+}
+article #blog #info {
+    display: inline-block;
+    font-size: 14px;
+    background-color:#F3FCFA;
+}
+
+#pagination  li {
+    display: inline; 
+}
+#pagination > li > a,
+#pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    text-decoration: none;
+    color: #337ab7;
+    border: 1px solid #ddd;
+    margin-left: -1px;     
+}
+#pagination > li > a:hover, 
+#pagination > li > a:focus,
+#pagination > li > span:hover,
+#pagination > li > span:focus {
+      z-index: 2;
+      color: #23527c;
+      background-color: #dddddd;
+}
+  
+#aside #new-message {
+    background-color: #C5F5DC; 
+    font-size: 18px; 
+    font-weight: bold; 
+    color: #EC0DBC;
+}
+/*--------------------------------- login-register ------------------------------- */
+article #top #user-reg {
+    margin: -9px -22px 0 -11px;
+    padding: 10px 11px 11px 11px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #D8FAE8;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+article #top #login {
+    margin: 30px 10px 0 0;
+}
+article #top button {
+    width:63px; 
+    font-weight: bold;
+    line-height:30px;
+    background-color:aqua;
+    border :1px solid #eeeeee;
+}
+/*---------------------------------article ------------------------------- */
+#theme {
+    /* border: 1px solid #92EEB5; */
+    box-shadow: 0 1px 2px #999;
+    margin: 0 10px 15px 0;
+}
+#theme #title {
+    box-shadow: 0 -1px 1px rgba(0,0,0,0.12), 0 -1px 1px rgba(0,0,0,0.24);
+    margin: 2px 0 0 0;
+    padding: 10px 10px 10px 10px;
+    background-color: #D8FAE8;
+}
+#theme #title #info {
+    display: inline-block;
+    font-size: 14px;
+}
+#theme #content {
+    margin: 11px 10px 11px 10px;
+    padding: 5px 5px 15px 5px;
+    font-size: 16px;
+}
+#comment {
+    /* border: 1px solid #92EEB5; */
+    box-shadow: 0 1px 2px #999;
+    margin: 0 10px 15px 0;
+    /* box-shadow: 0 3px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
+}
+#comment #title{
+    box-shadow: 0 -1px 1px rgba(0,0,0,0.12), 0 -1px 1px rgba(0,0,0,0.24);
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 10px 10px 10px;
+    background-color: #D8FAE8;
+}
+#comment #comment-content {
+    border-bottom: 1px solid #d8d8d8;
+    padding: 11px 10px 11px 15px;
+}
+#comment #comment-content #comment-main {
+    font-size: 15px;
+}
+#comment #comment-content #info {
+    display: inline-block;
+    font-size: 14px;
+}
+#reply {
+    /* border: 1px solid #92EEB5; */
+    border-bottom: 1px solid #999;
+    padding: 6px 0 3px 0;
+    margin: 0 10px 4px 0;
+    box-shadow: 0 -1px 2px rgba(0,0,0,0.24), 0 -1px 2px rgba(0,0,0,0.24);
+}
+#reply #write {
+    font-weight: bold;
+    height: 22px;
+}
+#reply textarea {
+    width:100%; 
+    height: 188px;
+}
+#reply button {
+    width:80px; 
+    line-height:30px;
+    background-color:aqua;
+    border :1px solid #eeeeee;
+}
+
+/*--------------------------------- wiki ------------------------------- */
+#wiki {
+    box-shadow: 0 1px 2px #999;
+    margin: 0 10px 15px 0;
+}
+#wiki #title {
+    box-shadow: 0 -1px 1px rgba(0,0,0,0.12), 0 -1px 1px rgba(0,0,0,0.24);
+    margin: 2px 0 0 0;
+    padding: 10px 10px 10px 10px;
+    background-color: #D8FAE8;
+}
+#wiki #title #info {
+    display: inline-block;
+    font-size: 14px;
+}
+#wiki #content {
+    margin: 11px 10px 11px 10px;
+    padding: 5px 5px 15px 5px;
+    font-size: 16px;
+}
+#navi {
+    border-bottom: 1px solid #999;
+    padding: 15px 15px 15px 15px;
+    margin: 2px 10px 15px 0;
+    font-size: 16px;
+    box-shadow: 0 -1px 2px rgba(0,0,0,0.24), 0 -1px 2px rgba(0,0,0,0.24);
+} 
+
+#navi ul li {
+    margin-left: 22px;
+}
+/*--------------------------------- more ------------------------------- */
+#more {
+    box-shadow: 0 1px 2px #999;
+    margin: 0 10px 15px 0;
+}
+#more #title {
+    box-shadow: 0 -1px 1px rgba(0,0,0,0.12), 0 -1px 1px rgba(0,0,0,0.24);
+    margin: 2px 0 0 0;
+    padding: 10px 10px 10px 10px;
+    background-color: #D8FAE8;
+}
+#more #title #info {
+    display: inline-block;
+    font-size: 14px;
+}
+#more #content {
+    margin: 11px 10px 11px 10px;
+    padding: 5px 5px 15px 5px;
+    font-size: 16px;
+}
+/*--------------------------------- new ------------------------------- */
+#new-top {
+    margin: 0 10px 10px 0;
+    padding: 0 0 4px 0;
+    /* border: 1px solid #92EEB5; */
+    box-shadow: 0 1px 2px #999;
+}
+#new-theme {
+    padding: 12px 0 10px 10px;
+    margin-right: -0.01px;
+    background-color: #D8FAE8;
+    box-shadow: 0 0 1px rgba(0,0,0,0.22), 0 1px 1px rgba(0,0,0,0.22);
+}
+form #topic-group {
+   margin: 11px 0 11px 0;
+}
+form #topic-group #category #category-control {
+    height: 30px;
+    background-color: #FFFFFF;
+    border :1px solid #CAC1C1; /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: solid 1px #CAC1C1;
+    padding-left: 9px;
+}
+form #topic-group input {
+    width: 63.5%;
+    height: 30px;
+}
+form #new textarea {
+    width:100%; 
+    height: 444px;
+}
+form #new button {
+    width:63px; 
+    line-height:30px;
+    background-color:aqua;
+    border :1px solid #eeeeee;
+}
+/*--------------------------------- user ------------------------------- */
+#user-top {
+    margin: 0 10px 10px 0;
+    padding: 0 0 4px 0;
+    /* border: 1px solid #92EEB5; */
+    box-shadow: 0 1px 2px #999; 
+}
+#user-top #person {
+    margin: 11px;
+}
+#tab1 {
+    margin: 0 10px 10px 0;
+    /* border: 1px solid #E5F7ED; */
+    box-shadow: 0 1px 2px #999; 
+}
+#tab1 #menu-title {
+    padding: 12px 0 10px 10px;
+    margin-bottom: 1px;
+    background-color: #D8FAE8;
+    box-shadow: 0 0 2px rgba(0,0,0,0.22), 0 2px 2px rgba(0,0,0,0.22);
+}
+#tab1 #menu-title li{
+    display: inline-block;
+}
+#tab1 #menu-title li.off{
+    background:#FFFFFF;color:#336699;font-weight:bold;
+}
+#user-info #blog{
+    border-bottom: 1px solid #d8d8d8; 
+    padding: 11px 11px 11px 11px;
+}
+#user-info #blog a {
+    font-weight: bold;
+    font-size: 17px;
+}
+#user-info #blog #info {
+    font-size: 13px;
+}
+#user-info #blog #comment-info {
+    font-size: 16px;
+}
+#aside {
+        border-bottom: 1px solid #999;
+        padding: 15px 15px 15px 15px;
+        margin: 2px 10px 15px 0;
+        text-align: center;
+        font-size: 15px;
+        box-shadow: 0 -1px 2px rgba(0,0,0,0.24), 0 -1px 2px rgba(0,0,0,0.24);
+} 
+
+#myBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #349E64; /* Set a background color */
+    font-weight: bold;
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 100%; /* Rounded corners */
+}
+
+#myBtn:hover {
+    background-color: #999; /* Add a dark-grey background on hover */
+}
+
+/* ---------------------desk -------nav ---------------------- */ 
+
+#primary_nav, #nav_left, #nav_right {
+    display: none;
+}
+
+
+
+/*-------------------------------------Desktop------------------------  */
+
+@media only screen and (min-width: 768px) {
+ 
+    main {
+        flex: 1;  /* 1 代表盡可能最大，會自動填滿除了 header footer 以外的空間 */
+        margin: 0 9% 22px 9%;
+    } 
+    #menu, #mnav {
+        display: none;
+    }
+    #nav_left {
+        display: block; 
+        position: fixed;
+        height: auto;
+        left: 126px;
+        font-size: 18px;
+        line-height: 50px;
+        font-weight: 700;
+        background-color:#C5F5DC;
+    }
+    #nav_left li {
+        display: inline-block;
+        padding: 0 33px 0 0;
+    }
+    #nav_right {
+        display: block; 
+        position: fixed;
+        height: auto;
+        right: 30px;
+        font-size: 18px;
+        line-height: 50px;
+        font-weight: 700;
+        background-color:#C5F5DC;
+    }
+    #nav_right input {
+        display: none;
+    }
+    #nav_right li {
+        display: inline-block;
+    }
+    #primary_nav {
+        display: block; 
+        position: fixed;
+        height: auto;
+        font-size: 18px;
+        right: 0;
+        line-height: 50px;
+        background-color:#C5F5DC;
+    }
+    #primary_nav {
+        margin-right: 165px;
+    }
+    #primary_nav ul li {
+        display: inline-block; 
+    }
+    #primary_nav ul li a {
+        padding: 0 11px 0 22px;
+        font-weight: 700;
+    }
+    #primary_nav ul li:hover .submenu {
+        display: block;
+    }
+    #primary_nav ul li .submenu {
+        display: none;
+        position: absolute;
+    }
+    #primary_nav ul ul li {
+        display: block;
+        border-bottom:1px solid #333;
+        background-color:#33b5e5;
+    }
+    #primary_nav ul ul li span {
+        float:right;
+        font-size:15px;
+        margin-right: 11px;
+        font-weight: bold;
+    }
+    #primary_nav ul ul li #subitem {
+        height: 0;
+        overflow: hidden;
+    }
+    #primary_nav ul ul ul li {
+        border-bottom:1px solid #444;
+        background-color:#C1CDCD;
+    }
+    main {
+        margin-top: 50px;
+    }
+
+     /* For desktop: */
+    .re-desk-25 {width: 25%;}
+    .re-desk-75 {width: 75%;}
+}
+ 

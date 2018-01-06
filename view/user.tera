@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rust-Forum</title>
+    <meta name="description" content="CSS only mobile first navigation">
+    <meta name="author" content="Ian Yates">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ 
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../css/default.css">
+</head>
+<body >
+    <div id="all">
+        <header >
+                <a id="logo" href="/" >Rust</a>
+                <label ><a id="menu" href="#" >Menu</a></label>
+        </header>
+        <nav id="mnav" >
+                <ul>
+                    <li >
+                        <a href="/wiki">Wiki</a>
+                    </li>
+                    <li >
+                        <a href="/more">More</a>
+                    </li>
+                    {% if username %}
+                    <li >
+                        <a href="/article/new">New</a>
+                    </li>
+                    <li >
+                        <a  href="/user/{{ user_id }}?count={{count}}">{{ username }}</a>
+                    </li>
+                    <li >
+                        <a  href="/user/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li >
+                        <a href="/user/login">Login-Reg</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+        </nav>
+        <main id="main">
+            <div id="content" >
+                <div class="re-desk-75 re-table-100 ">
+                    <div id="user-top">
+                            <div id="new-theme">
+                                <h4> My-Centre </h4> 
+                            </div>
+                            <div id="person">
+                                <span id="person-info">user-img:</span><span id="person-info">{{ this_user.username }}</span>
+                                <div id="person-info">
+                                    <p>email:{{ this_user.email }}</p>
+                                    <p>Reg-time:{{ this_user.created_at }}</p>
+                                    <p>Publish:  Comment:</p>
+                                    <p>Unread_count: {{ count }}</p>
+                                </div>
+                            </div>
+                    </div>
+                    <div id="tab1" class="tab1">
+                        <ul id="menu-title">
+                            <li id="one1" onclick="setTab('one',1)"><h4>MyPublish</h4></li>&emsp;
+                            <li id="one2" onclick="setTab('one',2)"><h4>MyBlog</h4></li>&emsp;
+                            <li id="one3" onclick="setTab('one',3)"><h4>MyComment</h4></li>&emsp;
+                            {% if user_id == this_user.id %}
+                            <li id="one4" onclick="setTab('one',4)"><h4>
+                                <span>MyMessage</span> 
+                                {% if count > 0 %}
+                                    <span style="color: #EC0DBC;"><strong> {{count}}</strong></span>
+                                {% endif %}
+                            </h4></li>
+                            {% endif %}
+                        </ul>
+                        <div id="user-info">
+                            <div id="con_one_1" class="tab_content">
+                                {% for article in user_articles %}
+                                    <div id="blog">
+                                        <div><a href="/article/{{ article.id }}"> {{ article.title }} </a></div>
+                                        <span id="info">{{ article.category }}</span>  • <span id="info">{{ article.rtime }}</span> • <span id="info">Comment:{{ article.comments_count }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div id="con_one_2" style="display:none;" class="tab_content">
+                                {% for article in user_blogs %}
+                                {% if article.category == "Blog" %}
+                                    <div id="blog">
+                                            <div><a href="/article/{{ article.id }}"> {{ article.title }} </a></div>
+                                            <span id="info">{{ article.category }}</span>  • <span id="info">{{ article.rtime }}</span> • <span id="info">Comment:{{ article.comments_count }}</span>
+                                        </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div id="con_one_3" style="display:none;" class="tab_content">
+                                {% for comment_article in user_comments %}
+                                    <div id="blog">
+                                        <div>
+                                            <span><a href="/article/{{ comment_article.article_id }}"> {{ comment_article.article_title }} </a></span> &emsp; 
+                                            <span style="float:right;"> 
+                                                <span id="info">{{ comment_article.article_category }}</span> • <span id="info">{{ comment_article.rtime }}</span> • 
+                                                <span id="info">Comment:{{ comment_article.article_comments_count }}</span>
+                                            </span>
+                                        </div>
+                                        <span id="comment-info" >{{ comment_article.cooked }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if user_id == this_user.id %}
+                            <div id="con_one_4" style="display:none;" class="tab_content">
+                                {% for message in user_messages %}
+                                        {% if loop.index <= count %}
+                                        <div id="blog">
+                                            <div>
+                                                <span><a href="/user/{{ message.from_uid }}"> {{ message.from_uid_name }} </a></span> 
+                                                <span > at </span> <span ><a href="/article/{{ message.article_id }}"> {{ message.article_title }} </a></span> <span >comment you</span>  
+                                                <span id="info" >{{ message.rtime }}</span>
+                                                <span id="info" style="float: right; font-size: 16px; color: #EC0DBC;" ><strong> new </strong></span>
+                                            </div>
+                                            <span id="comment-info" >{{ message.comment_cooked }}</span>
+                                        </div>
+                                        {% else %}
+                                        <div id="blog">
+                                            <div>
+                                                <span><a href="/user/{{ message.from_uid }}"> {{ message.from_uid_name }} </a></span> 
+                                                <span > at </span> <span ><a href="/article/{{ message.article_id }}"> {{ message.article_title }} </a></span> <span >comment you</span>  
+                                                <span id="info" >{{ message.rtime }}</span>
+                                            </div>
+                                            <span id="comment-info" >{{ message.comment_cooked }}</span>
+                                        </div>
+                                        {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>    
+                    </div>
+                </div> 
+
+
+                <div class="re-desk-25 re-table-100">
+                    <div id="aside">
+                        <h3>What</h3>
+                        <p>Chania is a city on the island of Crete.</p>
+                        <h3>Where</h3>
+                        <p>Crete is a Greek island in the Mediterranean Sea.</p>
+                        <h3>How</h3>
+                        <p>You can reach Chania airport from all over Europe.</p>
+                    </div>
+                </div>
+                <footer class="re-desk-25 re-table-100" >
+                    <div id="aside">
+                        <div >
+                            <ul >
+                                <a class="Footer-link" href="" rel="noopener">About</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Help</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Copyright</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Cookies</a> &nbsp; 
+                                <a class="Footer-link" href="" rel="noopener">ADs</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Mark</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Blog</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Application</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Job</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Developer</a>
+                                <li class="Footer-item Footer-copyright copyright">&copy; 2017 Rust</li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    
+        <span id="nav_left">
+                <li class="menu-item"><a href="/wiki">Wiki</a></li>
+                <li class="menu-item"><a href="/more">More</a></li>
+        </span>
+        {% if username %}
+        <span id="primary_nav">
+                <ul id="dmenu">
+                    <span id="dright">
+                        <li class="menu-item"><a href="/article/new">New</a></li>
+                    </span>
+                </ul>
+        </span>
+        <span id="nav_right">
+                <li ><a href="/user/{{ user_id }}?count={{count}}">{{ username }} &emsp;</a></li>
+                <li ><a href="/user/logout">Logout</a></li>
+        </span>
+        {% else %}
+        <span id="nav_right">
+                <li ><a href="/user/register">Register &emsp;</a></li>
+                <li ><a href="/user/login">Login</a></li>
+        </span>
+        {% endif %}
+    </div>
+    <script src="../js/nav.js" async="async"></script>
+    <script src="../js/tabs.js" async="async"></script>
+    <script src="../js/highlight.pack.js" async="async"></script>
+    <script >hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

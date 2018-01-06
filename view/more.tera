@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rust-Forum</title>
+    <meta name="description" content="CSS only mobile first navigation">
+    <meta name="author" content="Ian Yates">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ 
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="../img/favicon.ico">
+</head>
+<body >
+    <div id="all">
+        <header >
+                <a id="logo" href="/" >Rust</a>
+                <label ><a id="menu" href="#" >Menu</a></label>
+        </header>
+        <nav id="mnav" >
+                <ul>
+                    <li >
+                        <a href="/wiki">Wiki</a>
+                    </li>
+                    <li >
+                        <a href="/more">More</a>
+                    </li>
+                    {% if username %}
+                    <li >
+                        <a href="/article/new">New</a>
+                    </li>
+                    <li >
+                        <a  href="/user/{{ user_id }}">{{ username }}</a>
+                    </li>
+                    <li >
+                        <a  href="/user/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li >
+                        <a href="/user/login">Login-Reg</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+        </nav>
+        <main id="main">
+            <div id="content" >
+                <div style="width: 88%; margin:0 auto; ">
+                    <div id="more">
+                        <div id="title">
+                            <h3> There can be Cool Things </h3>
+                            <span id="info">Author</span>&emsp;
+                            <span id="info">2017-9-11</span>
+                        </div>
+                        <div id="content">
+                            <ul>
+                                <h3 style="color:aqua;"><a href="">Cool Things</a></h3>
+                            </ul>
+                            <ul>
+                                    <li><a href="">Cool Things</a></li>
+                                    <li>
+                                        <ul>
+                                            <li><a href="">Cool Things</a></li>
+                                            <li><a href="">Cool Things</a></li>
+                                            <li><a href="">Cool Things</a></li>
+                                        </ul>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    
+        <span id="nav_left">
+                <li class="menu-item"><a href="/wiki">Wiki</a></li>
+                <li class="menu-item"><a href="/more">More</a></li>
+        </span>
+        {% if username %}
+        <span id="primary_nav">
+                <ul id="dmenu">
+                    <span id="dright">
+                        <li class="menu-item"><a href="/article/new">New</a></li>
+                    </span>
+                </ul>
+        </span>
+        <span id="nav_right">
+                <li ><a href="/user/{{ user_id }}">{{ username }} &emsp;</a></li>
+                <li ><a href="/user/logout">Logout</a></li>
+        </span>
+        {% else %}
+        <span id="nav_right">
+                <li ><a href="/user/register">Register &emsp;</a></li>
+                <li ><a href="/user/login">Login</a></li>
+        </span>
+        {% endif %}
+    </div>
+    <script src="../js/nav.js" async="async"></script>
+</body>
+</html>

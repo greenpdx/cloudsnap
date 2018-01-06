@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rust-Forum</title>
+    <meta name="description" content="CSS only mobile first navigation">
+    <meta name="author" content="Ian Yates">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ 
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    
+</head>
+<body >
+    <div id="all">
+        <header >
+                <a id="logo" href="/" >Rust</a>
+                <label ><a id="menu" href="#" >Menu</a></label>
+        </header>
+        <nav id="mnav" >
+                <ul>
+                    <li >
+                        <a href="/wiki">Wiki</a>
+                    </li>
+                    <li >
+                        <a href="/more">More</a>
+                    </li>
+                    {% if username %}
+                    <li >
+                        <a href="/article/new">New</a>
+                    </li>
+                    <li >
+                        <a  href="/user/{{ user_id }}?count={{count}}">{{ username }}</a>
+                    </li>
+                    <li >
+                        <a  href="/user/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li >
+                        <a href="/user/login">Login-Reg</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+        </nav>
+        <main id="main">
+            <div id="content" >
+                <div class="re-desk-75 re-table-100 ">
+                    <article >
+                        <div id="top" class="tab1">
+                            <div id="title">
+                                <li  ><a href="/">All</a></li>&emsp;
+                                <li  ><a href="/Share">Share</a></li>&emsp;
+                                <li  ><a href="/Article">Article</a></li>&emsp; 
+                                <li  ><a href="/FAQ">FAQ</a></li>&emsp;
+                                <li  ><a href="/NoComment">NoComment</a></li>&emsp;
+                                <li  ><a href="/Job">Job</a></li>&emsp;
+                                <li  ><a href="/Blog">Blog</a></li>
+                            </div>
+                            <div id="topic">
+                                {% for data in datas %}
+                                {% if data.category == "Announcement" %}
+                                    <div id="annu">
+                                        <div>
+                                            <span id="annu-title"> <a href="/article/{{ data.id }}" title="{{ data.title }}"> {{ data.title }}&hellip; </a></span>
+                                            <span id="right-info">{{ data.comments_count }}</span>
+                                        </div>
+                                        <span id="info" style="color: #EC0DBC;">{{ data.category }}</span>  •  <span id="info"><a href="/user/{{data.uid}}">{{ data.username }}</a></span> •   
+                                        <span id="info">{{ data.rtime }}</span>
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </article>
+                    <div >
+                        {% for data in datas %}
+                        {% if data.category != "Announcement" %}
+                        <article>
+                            <div id="blog">
+                                <div>
+                                    <a id="title" href="/article/{{ data.id }}" title="{{ data.title }}"> {{ data.title }} </a>
+                                    <div id="right-info">{{ data.comments_count }}</div>
+                                </div>
+                                <span id="info">{{ data.category }}</span>  •  <span id="info"><a href="/user/{{data.uid}}">{{ data.username }}</a></span> •   
+                                <span id="info">{{ data.rtime }}</span>
+                            </div>
+                        </article>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                         <ul id="pagination">
+                            <li>
+                                <a href="/{{tag}}?page={{previous_page}}" aria-label="Previous">
+                                    <span aria-hidden="true">Previous</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/{{tag}}?page=1" >
+                                    <span aria-hidden="true">First</span>
+                                </a>
+                            </li>
+                            <li>
+                                <span aria-hidden="true">•••</span>
+                            </li>
+
+                            {% for pye in pages %}
+                            {% if pye == page_count/2 - 1 %}
+                            <li id="active"><a href="?page={{ pye }}">{{ pye }}</a></li>
+                            {% endif %}
+                            {% if pye == page_count/2 %}
+                            <li id="active"><a href="?page={{ pye }}">{{ pye }}</a></li>
+                            {% endif %}
+                            {% if pye == page_count/2 + 1 %}
+                            <li id="active"><a href="?page={{ pye }}">{{ pye }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            <li>
+                                <span aria-hidden="true">•••</span>
+                            </li>
+                            <li>
+                                <a href="/{{tag}}?page={{ page_count }}" >
+                                    <span aria-hidden="true">Last</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/{{tag}}?page={{next_page}}" aria-label="Next">
+                                    <span aria-hidden="true">Next</span>
+                                </a>
+                            </li>  
+                        </ul>       
+                    </div>
+                    
+                </div>
+
+                {% if count > 0 %}
+                <div class="re-desk-25 re-table-100">
+                    <div id="aside">
+                        <a id="new-message" href="/user/{{ user_id }}?count={{count}}">{{ count }}&nbsp;New&nbsp;Message</a>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="re-desk-25 re-table-100">
+                    <div id="aside">
+                        <h3>What</h3>
+                        <p>Chania is a city on the island of Crete.</p>
+                        <h3>Where</h3>
+                        <p>Crete is a Greek island in the Mediterranean Sea.</p>
+                        <h3>How</h3>
+                        <p>You can reach Chania airport from all over Europe.</p>
+                    </div>
+                </div>
+                <footer class="re-desk-25 re-table-100" >
+                    <div id="aside">
+                        <div >
+                            <ul >
+                                <a class="Footer-link" href="" rel="noopener">About</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Help</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Copyright</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Cookies</a> &nbsp; 
+                                <a class="Footer-link" href="" rel="noopener">ADs</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Mark</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Blog</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Application</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Job</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Developer</a>
+                                <li class="Footer-item Footer-copyright copyright">&copy; 2017 Rust</li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        </main>
+    
+        <span id="nav_left">
+                <li class="menu-item"><a href="/wiki">Wiki</a></li>
+                <li class="menu-item"><a href="/more">More</a></li>
+        </span>
+        {% if username %}
+        <span id="primary_nav">
+                <ul id="dmenu">
+                    <span id="dright">
+                        <li class="menu-item"><a href="/article/new">New</a></li>
+                    </span>
+                </ul>
+        </span>
+        <span id="nav_right">
+                <li ><a href="/user/{{ user_id }}?count={{count}}">{{ username }}&emsp;</a></li>
+                <li ><a href="/user/logout">Logout</a></li>
+        </span>
+        {% else %}
+        <span id="nav_right">
+                <li ><a href="/user/register">Register &emsp;</a></li>
+                <li ><a href="/user/login">Login</a></li>
+        </span>
+        {% endif %}
+    </div>
+    <script src="../js/nav.js" async="async"></script>
+    <script src="../js/gtop.js" async="async"></script>
+</body>
+</html>

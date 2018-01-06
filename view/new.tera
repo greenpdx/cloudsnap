@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rust-Forum</title>
+    <meta name="description" content="CSS only mobile first navigation">
+    <meta name="author" content="Ian Yates">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ 
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="../img/favicon.ico">
+</head>
+<body >
+    <div id="all">
+        <header >
+                <a id="logo" href="/" >Rust</a>
+                <label ><a id="menu" href="#" >Menu</a></label>
+        </header>
+        <nav id="mnav" >
+                <ul>
+                    <li >
+                        <a href="/wiki">Wiki</a>
+                    </li>
+                    <li >
+                        <a href="/more">More</a>
+                    </li>
+                    {% if username %}
+                    <li >
+                        <a href="/article/new">New</a>
+                    </li>
+                    <li >
+                        <a  href="/user/{{ user_id }}">{{ username }}</a>
+                    </li>
+                    <li >
+                        <a  href="/user/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li >
+                        <a href="/user/login">Login-Reg</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+        </nav>
+        <main id="main">
+            <div id="content" >
+                <div class="re-desk-75 re-table-100 ">
+                <div id="new-top">
+                    <div id="new-theme">
+                        <h4>New</h4>
+                    </div>
+                    <div >
+                        <form id="form" method="post" action="/article/addarticle" accept-charset="utf-8">
+                            <div id="topic-group">
+                                    {% if username == "admin" %}
+                                    <span id="category">
+                                        <select name="category" id="category-control" >
+                                            <option value="Topic">Topic <span class="icon-arrow"></span></option>
+                                            <option value="Share">Share</option>
+                                            <option value="Article">Article</option>
+                                            <option value="FAQ">FAQ</option>
+                                            <option value="Job">Job</option>
+                                            <option value="Blog">Blog</option>
+                                            <option value="Announcement">Announcement</option>
+
+                                            <option style="color: #1EB332;" disabled="disabled" >--wiki--</option>
+                                            <option value="Docs">Docs</option>
+                                            <option value="Resources">Resources</option>
+                                            <option value="Web">Web</option>
+                                            <option value="Embed">Embed</option>
+                                            <option value="Server">Server</option>
+                                            <option value="Client">Client</option>
+                                        </select>
+                                    </span>&emsp;
+                                    {% else %}
+                                    <span id="category">
+                                        <select name="category" id="category-control">
+                                            <option value="Topic">Topic</option>
+                                            <option value="Share">Share</option>
+                                            <option value="Article">Article</option>
+                                            <option value="FAQ">FAQ</option>
+                                            <option value="Job">Job</option>
+                                            <option value="Blog">Blog</option>
+                                        </select>
+                                    </span>&emsp;
+                                    {% endif %}
+                                    <span id="title">
+                                        <input type="text" name="title" placeholder="Please input title">
+                                    </span>
+                            </div>    
+                            <div id="new">
+                                 <textarea name="raw" placeholder="Write new Publish in markdown!"></textarea>
+                            </div>
+                            <div id="new">
+                                <button type="submit" id="submit"><span class="tip"> Publish </span></button>
+                            </div>
+                        </form>
+                    </div>                                         
+                </div>
+                </div>
+
+
+                <div class="re-desk-25 re-table-100">
+                    <div id="aside">
+                        <h3>What</h3>
+                        <p>Chania is a city on the island of Crete.</p>
+                        <h3>Where</h3>
+                        <p>Crete is a Greek island in the Mediterranean Sea.</p>
+                        <h3>How</h3>
+                        <p>You can reach Chania airport from all over Europe.</p>
+                    </div>
+                </div>
+                <footer class="re-desk-25 re-table-100" >
+                    <div id="aside">
+                        <div >
+                            <ul >
+                                <a class="Footer-link" href="" rel="noopener">About</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Help</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Copyright</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Cookies</a> &nbsp; 
+                                <a class="Footer-link" href="" rel="noopener">ADs</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Mark</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Blog</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Application</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Job</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Developer</a>
+                                <li class="Footer-item Footer-copyright copyright">&copy; 2017 Rust</li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    
+        <span id="nav_left">
+                <li class="menu-item"><a href="/wiki">Wiki</a></li>
+                <li class="menu-item"><a href="/more">More</a></li>
+        </span>
+        {% if username %}
+        <span id="primary_nav">
+                <ul id="dmenu">
+                    <span id="dright">
+                        <li class="menu-item"><a href="/article/new">New </a></li>
+                    </span>
+                </ul>
+        </span>
+        <span id="nav_right">
+                <li ><a href="/user/{{ user_id }}">{{ username }} &emsp;</a></li>
+                <li ><a href="/user/logout">Logout</a></li>
+        </span>
+        {% else %}
+        <span id="nav_right">
+                <li ><a href="/user/register">Register &emsp;</a></li>
+                <li ><a href="/user/login">Login</a></li>
+        </span>
+        {% endif %}
+    </div>
+    <script src="../js/nav.js" async="async"></script>
+</body>
+</html>

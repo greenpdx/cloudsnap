@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rust-Forum</title>
+    <meta name="description" content="CSS only mobile first navigation">
+    <meta name="author" content="Ian Yates">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ 
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="../img/favicon.ico">
+</head>
+<body >
+    <div id="all">
+        <header >
+                <a id="logo" href="/" >Rust</a>
+                <label ><a id="menu" href="#" >Menu</a></label>
+        </header>
+        <nav id="mnav" >
+                <ul>
+                    <li >
+                        <a href="/wiki">Wiki</a>
+                    </li>
+                    <li >
+                        <a href="/more">More</a>
+                    </li>
+                    {% if username %}
+                    <li >
+                        <a href="/article/new">New</a>
+                    </li>
+                    <li >
+                        <a  href="/user/{{ user_id }}">{{ username }}</a>
+                    </li>
+                    <li >
+                        <a  href="/user/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li >
+                        <a href="/user/login">Login-Reg</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+        </nav>
+        <main id="main">
+            <div id="content" >
+
+                <div class="re-desk-25">
+                        <div id="navi">
+                            <ul>
+                                <p><a ><strong>Docs</strong></a></p>
+                                {% for data in wikis %}
+                                {% if data.category == "Docs" %}
+                                    <li><a href="/wiki/{{ data.id }}" title="{{ data.title }}">{{ data.title }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <ul>
+                                <p><a ><strong>Resources</strong></a></p>
+                                {% for data in wikis %}
+                                {% if data.category == "Resources" %}
+                                    <li><a href="/wiki/{{ data.id }}" title="{{ data.title }}">{{ data.title }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <ul>
+                                <p><a ><strong>Web</strong></a></p>
+                                {% for data in wikis %}
+                                {% if data.category == "Web" %}
+                                    <li><a href="/wiki/{{ data.id }}" title="{{ data.title }}">{{ data.title }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <ul>
+                                <p><a ><strong>Embed</strong></a></p>
+                                {% for data in wikis %}
+                                {% if data.category == "Embed" %}
+                                    <li><a href="/wiki/{{ data.id }}" title="{{ data.title }}">{{ data.title }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <ul>
+                                <p><a ><strong>Server</strong></a></p>
+                                {% for data in wikis %}
+                                {% if data.category == "Server" %}
+                                    <li><a href="/wiki/{{ data.id }}" title="{{ data.title }}">{{ data.title }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <ul>
+                                <p><a ><strong>Client</strong></a></p>
+                                {% for data in wikis %}
+                                {% if data.category == "Client" %}
+                                    <li><a href="/wiki/{{ data.id }}" title="{{ data.title }}">{{ data.title }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <div id="aside">
+                            <div >
+                                <ul >
+                                    <a class="Footer-link" href="" rel="noopener">About</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Help</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Copyright</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Cookies</a> &nbsp; 
+                                    <a class="Footer-link" href="" rel="noopener">ADs</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Mark</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Blog</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Application</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Job</a> &nbsp;
+                                    <a class="Footer-link" href="" rel="noopener">Developer</a>
+                                    <li class="Footer-item Footer-copyright copyright">&copy; 2017 Rust</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div >
+                        
+                        
+                        
+                    </div>
+                </div>
+
+                <div class="re-desk-75 ">
+                    <div id="wiki">
+                        <div id="title">
+                            <h3> {{ rwiki.title }} </h3>
+                            <span id="info">Admin</span>&emsp;
+                            <span id="info">{{ rwiki.rtime }}</span>
+                        </div>
+                        <div id="content">
+                            {{ rwiki.cooked | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    
+        <span id="nav_left">
+                <li class="menu-item"><a href="/wiki">Wiki</a></li>
+                <li class="menu-item"><a href="/more">More</a></li>
+        </span>
+        {% if username %}
+        <span id="primary_nav">
+                <ul id="dmenu">
+                    <span id="dright">
+                        <li class="menu-item"><a href="/article/new">New </a></li>
+                    </span>
+                </ul>
+        </span>
+        <span id="nav_right">
+                <li ><a href="/user/{{ user_id }}">{{ username }} &emsp;</a></li>
+                <li ><a href="/user/logout">Logout</a></li>
+        </span>
+        {% else %}
+        <span id="nav_right">
+                <li ><a href="/user/register">Register &emsp;</a></li>
+                <li ><a href="/user/login">Login</a></li>
+        </span>
+        {% endif %}
+    </div>
+    <script src="../js/nav.js" async="async"></script>
+</body>
+</html>

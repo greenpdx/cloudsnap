@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rust-Forum</title>
+    <meta name="description" content="CSS only mobile first navigation">
+    <meta name="author" content="Ian Yates">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ 
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../css/default.css">
+</head>
+<body >
+    <div id="all">
+        <header >
+                <a id="logo" href="/" >Rust</a>
+                <label ><a id="menu" href="#" >Menu</a></label>
+        </header>
+        <nav id="mnav" >
+                <ul>
+                    <li >
+                        <a href="/wiki">Wiki</a>
+                    </li>
+                    <li >
+                        <a href="/more">More</a>
+                    </li>
+                    {% if username %}
+                    <li >
+                        <a href="/article/new">New</a>
+                    </li>
+                    <li >
+                        <a  href="/user/{{ user_id }}">{{ username }}</a>
+                    </li>
+                    <li >
+                        <a  href="/user/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li >
+                        <a href="/user/login">Login-Reg</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+        </nav>
+        <main id="main">
+            <div id="content" >
+                <div class="re-desk-75 re-table-100 ">
+                    <div id="theme">
+                        <div id="title">
+                            <h3> {{ article.title }} </h3> 
+                            <span id="info">{{ article.category }}</span> • 
+                            <span id="info"><a href="/user/{{article.uid}}">{{ article.username }}</a></span> • 
+                            <span id="info">{{ article.rtime }}</span>
+                        </div>
+                        <div id="content">{{ article.cooked | safe }}</div>
+                    </div>
+                    <div id="comment">
+                        <div id="title">Comment &nbsp;{{ article.comments_count }}</div>
+                        {% for comment in comments %}
+                            <div id="comment-content">
+                                <div>
+                                    <span id="info" style="font-weight: bold; color: #D10303;">{{loop.index}}.</span>
+                                    <span id="info"><a href="/user/{{comment.uid}}">{{ comment.username }}</a></span> • <span id="info">{{ comment.rtime }}</span>
+                                </div>
+                                <div id="comment-main">  {{ comment.cooked | safe }} </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div id="reply">
+                        {% if username %}
+                            <div id="write"> Write comment in markdwon! </div>
+                            <textarea class="ans_con" placeholder="if you want @somebody for send a message in your comment, the rule is: 
+                            1: the @ symbol can't be first position at line.(like: @somebodyxxxxx)
+                            2: one position before the @ symbol can't be space(like: xxxxx @somebodyxxxxx)."></textarea>
+                            <button type="submit" id="submit" data-aid="{{ article.id }}"><span class="tip"> Comment </span></button>
+                            <script type="text/javascript" src="http://mat1.gtimg.com/libs/jquery/1.12.0/jquery.min.js"></script>
+                            <script type="text/javascript" >
+                            var running = false;
+                            $('#submit').on('click', function(){
+                                if(running) return;
+                                running = true;
+                                $('.tip').text('');
+                                var ans_con = $('.ans_con').val();
+                                if(!ans_con){
+                                $('.tip').text('Input can not be Null');
+                                return;
+                                }
+                                $('.tip').text('Submitting');
+                                
+                                var aid = $(this).data('aid');
+
+                                $.ajax({
+                                async: false,
+                                url : '/article/addcomment',
+                                data : {aid:aid, raw:ans_con},
+                                dataType : 'json',
+                                type : 'get'
+                                }).done(function(){
+                                
+                                running = false;
+                                })
+                                window.location.reload ( true );  
+                            })
+                            </script>
+                        {% else %}
+                            <span style="margin: 0 0 0 11px;">Please login first and make a Comment.<a href="/user/login" style="background-color:aqua">Login</a></span>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+                <div class="re-desk-25 re-table-100">
+                    <div id="aside">
+                        <h3>What</h3>
+                        <p>Chania is a city on the island of Crete.</p>
+                        <h3>Where</h3>
+                        <p>Crete is a Greek island in the Mediterranean Sea.</p>
+                        <h3>How</h3>
+                        <p>You can reach Chania airport from all over Europe.</p>
+                    </div>
+                </div>
+                <footer class="re-desk-25 re-table-100" >
+                    <div id="aside">
+                        <div >
+                            <ul >
+                                <a class="Footer-link" href="" rel="noopener">About</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Help</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Copyright</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Cookies</a> &nbsp; 
+                                <a class="Footer-link" href="" rel="noopener">ADs</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Mark</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Blog</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Application</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Job</a> &nbsp;
+                                <a class="Footer-link" href="" rel="noopener">Developer</a>
+                                <li class="Footer-item Footer-copyright copyright">&copy; 2017 Rust</li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    
+        <span id="nav_left">
+                <li class="menu-item"><a href="/wiki">Wiki</a></li>
+                <li class="menu-item"><a href="/more">More</a></li>
+        </span>
+        {% if username %}
+        <span id="primary_nav">
+                <ul id="dmenu">
+                    <span id="dright">
+                        <li class="menu-item"><a href="/article/new">New</a></li>
+                    </span>
+                </ul>
+        </span>
+        <span id="nav_right">
+                <li ><a href="/user/{{ user_id }}">{{ username }} &emsp;</a></li>
+                <li ><a href="/user/logout">Logout</a></li>
+        </span>
+        {% else %}
+        <span id="nav_right">
+                <li ><a href="/user/register">Register &emsp;</a></li>
+                <li ><a href="/user/login">Login</a></li>
+        </span>
+        {% endif %}
+    </div>
+    <script src="../js/nav.js" async="async"></script>
+    <script src="../js/highlight.pack.js" async="async"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
