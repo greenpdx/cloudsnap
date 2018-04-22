@@ -28,7 +28,3 @@ welcome to contribute !
 
 <img alt="Mobile" height="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/public/2017-09-20%2018-17-55屏幕截图.png">
 
-
-### License
-
-[LICENSE-APACHE](https://github.com/OUIRC/muro/blob/master/LICENSE).
