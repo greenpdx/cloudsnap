@@ -30,7 +30,7 @@ mod utils;
 use model::db::ConnDsl;
 use api::index::{AppState, home, path};
 use api::auth::{signup, signin};
-use api::article::{article,article_list, article_new};
+use api::theme::{theme,theme_list, theme_new};
 use api::user::{user_info, user_delete, user_update};
 
 fn main() {
@@ -58,9 +58,9 @@ fn main() {
             .resource("/api/user_info", |r| { r.method(Method::GET).h(user_info); })
             .resource("/api/user_delete", |r| { r.method(Method::GET).h(user_delete); })
             .resource("/api/user_update", |r| { r.method(Method::POST).with2(user_update); })
-            .resource("/api/article_list", |r| { r.method(Method::GET).h(article_list); })
-            .resource("/api/article_new", |r| { r.method(Method::POST).with2(article_new); })
-            .resource("/api/{article_id}", |r| { r.method(Method::GET).h(article); })
+            .resource("/api/theme_list", |r| { r.method(Method::GET).h(theme_list); })
+            .resource("/api/theme_new", |r| { r.method(Method::POST).with2(theme_new); })
+            .resource("/api/{theme_id}", |r| { r.method(Method::GET).h(theme); })
             .register())
             .handler("/", fs::StaticFiles::new("public")))
         .bind("127.0.0.1:8000").unwrap()

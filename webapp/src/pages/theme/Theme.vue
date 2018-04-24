@@ -1,14 +1,14 @@
 <template>
-    <div id="article_id">
+    <div id="theme">
         <mnav id="mnav"></mnav>
                     <div id="content">
                         <div id="title">
-                            <h3> title : {{ article.title }} </h3> 
-                            <span id="info">category : {{ article.category }}</span>  
-                            <span id="info"><a :href="'/a/user/' + article.user_id">user_id : {{ article.user_id }}</a></span>  
-                            <span id="info">created_at : {{ article.created_at }}</span>  
+                            <h3> title : {{ theme.title }} </h3> 
+                            <span id="info">category : {{ theme.category }}</span>  
+                            <span id="info"><a :href="'/a/user/' + theme.user_id">user_id : {{ theme.user_id }}</a></span>  
+                            <span id="info">created_at : {{ theme.created_at }}</span>  
                         </div>
-                        <div id="body">content : {{ article.body }}</div>
+                        <div id="body">content : {{ theme.content }}</div>
                     </div>
     </div>
 </template>
@@ -17,22 +17,22 @@
 import axios from 'axios'
 import Mnav from '../../components/nav/Mnav'
 export default {
-    name: 'article_id',
+    name: 'theme',
     components: {
         "mnav": Mnav
     },
     data: function() {
         return {
-            article: ''
+            theme: ''
         }
     },
     mounted: function() {
-    // let article_id = this.$route.params.id
-    // console.log(article_id)
+    // let theme = this.$route.params.id
+    // console.log(theme)
     axios.get("http://localhost:8000/api/" + this.$route.params.id)
       .then((response) => {
-        this.article = response.data.article
-        console.log(response.data.article)
+        this.theme = response.data.theme
+        console.log(response.data.theme)
       })
       .catch((e) => {
         console.log(e)

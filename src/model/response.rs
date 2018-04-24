@@ -1,5 +1,5 @@
 use model::user::User;
-use model::article::Article;
+use model::theme::{Theme, ThemeListResult};
 
 pub enum MyError {
     NotFound,
@@ -21,10 +21,10 @@ pub struct SigninMsgs {
 }
 
 #[derive(Deserialize,Serialize, Debug)]
-pub struct ArticleListMsgs {
+pub struct ThemeListMsgs {
     pub status: i32,
     pub message : String,
-    pub article_list: Vec<Article>,
+    pub theme_list: Vec<ThemeListResult>,
 }
 
 #[derive(Deserialize,Serialize, Debug)]
@@ -35,8 +35,9 @@ pub struct UserInfoMsgs {
 }
 
 #[derive(Deserialize,Serialize, Debug)]
-pub struct ArticleMsgs {
+pub struct ThemeMsgs {
     pub status: i32,
     pub message : String,
-    pub article : Article,
+    pub theme : Theme,
 }
+ 

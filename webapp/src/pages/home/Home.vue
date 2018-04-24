@@ -7,41 +7,43 @@
                   <li  id="first"><router-link to="/">All</router-link></li>
                   <li  ><router-link to="/latest">Latest</router-link></li>
                   <li  ><router-link to="/top">Top</router-link></li>
-                  <li  ><router-link to="/Share">Share</router-link></li>
-                  <li  ><router-link to="/top">Article</router-link></li>
-                  <li  ><router-link to="/">FAQ</router-link></li>
-                  <li  ><router-link to="/Share">Job</router-link></li>
+                  <li  ><router-link to="/share">Share</router-link></li>
+                  <li  ><router-link to="/blog">Blog</router-link></li>
+                  <li  ><router-link to="/help">Help</router-link></li>
+                  <li  ><router-link to="/job">Job</router-link></li>
             </div>
             <div id="title">
-                  <span id="title-topic">Topic</span>
+                  <span id="title-topic">Theme</span>
                   <span id="right">
                       <span id="info">Category</span>
                       <span id="info">User</span>
-                      <span id="info">Reply</span>
                       <span id="info">View</span>
+                      <span id="info">Reply</span>
                       <span>Activity</span>
                   </span>      
             </div>
             <div id="content">
-                  <div id="items" v-for="(article, index) in article_list" :key="index">
-                      <div id="announcement" v-if="article.category === 'Announcement'">
-                          <span id="announcement-title"><a :href="'/a/article/' + article.id" title="article.title"> {{ article.title }} </a></span>
+                  <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                      <div id="office" v-if="theme.category === 'Office'">
+                          <span id="office-title"><a :href="'/a/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
                           <span id="right">
-                              <span id="info"> {{ article.category }} </span>
-                              <span id="info"><a :href="'/a/user/' + article.user_id"> {{ article.user_id }} </a></span>
-                              <span id="info"> {{ article.id }} </span>
-                              <span > {{ article.created_at }} </span>
+                              <span id="info"> {{ theme.category }} </span>
+                              <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                              <span id="info"> {{ theme.id }} </span>
+                              <span id="info"> {{ theme.id }} </span>
+                              <span > {{ theme.created_at }} </span>
                           </span>                        
                       </div>
                   </div>
-                  <div id="items" v-for="(article, index) in article_list">
-                      <div id="item" v-if="article.category !== 'Announcement'">
-                        <span id="item-title"><a :href="'/a/article/' + article.id" title="article.title"> {{ article.title }} </a></span>
+                  <div id="items" v-for="(theme, index) in theme_list">
+                      <div id="item" v-if="theme.category !== 'Office'">
+                        <span id="item-title"><a :href="'/a/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
                         <span id="right">
-                            <span id="info"> {{ article.category }} </span>
-                            <span id="info"><a :href="'/a/user/' + article.user_id"> {{ article.user_id }} </a></span>
-                            <span id="info"> {{ article.id }} </span>
-                            <span > {{ article.created_at }} </span>
+                            <span id="info"> {{ theme.category }} </span>
+                            <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                            <span id="info"> {{ theme.id }} </span>
+                            <span id="info"> {{ theme.id }} </span>
+                            <span > {{ theme.created_at }} </span>
                         </span>
                       </div>
                   </div>
@@ -62,14 +64,14 @@ export default {
   },
   data: function() {
     return {
-      article_list: ''
+      theme_list: ''
     }
   },
   mounted: function() {
-    axios.get('http://localhost:8000/api/article_list', auth.getAuthHeader())
+    axios.get('http://localhost:8000/api/theme_list', auth.getAuthHeader())
       .then((response) => {
-        this.article_list = response.data.article_list.reverse()
-        console.log(response.data.article_list)
+        this.theme_list = response.data.theme_list.reverse()
+        console.log(response.data.theme_list)
         console.log(sessionStorage.getItem('token'))
         console.log(JSON.parse(sessionStorage.getItem('signin_user')).username)
       })
@@ -109,18 +111,18 @@ main {
 #center #title #right #info {
   padding-right: 4vw;
 }
-#center #items #announcement, #center #items #item {
+#center #items #office, #center #items #item {
   line-height: 55px;
   border-bottom: 1px solid rgb(231, 238, 233);
 }
-#center #announcement {
+#center #office {
   color: #eb15ce;
 }
 #center #items #item a {
   color: #0541af;
 }
 
-#center #title-topic, #announcement-title, #item-title {
+#center #title-topic, #office-title, #item-title {
   padding: 0 2vw 0 1vw;
 }
 #center #right {

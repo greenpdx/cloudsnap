@@ -2,18 +2,18 @@
     <div id="new">
         <mnav id="mnav"></mnav>
         <div id="content">
-            <div id="new-title"><p>New Article</p></div>
+            <div id="new-title"><p>New Theme</p></div>
             <form id="form" >
                     <div id="topic-group">
                         <span  id="category">
                                 <select v-if="username" name="category" v-model="Category" id="category-control" >
                                     <option value="Topic">Topic <span class="icon-arrow"></span></option>
+                                    <option value="Announce">Announce</option>
                                     <option value="Share">Share</option>
-                                    <option value="Article">Article</option>
-                                    <option value="FAQ">FAQ</option>
-                                    <option value="Job">Job</option>
                                     <option value="Blog">Blog</option>
-                                    <option value="Announcement">Announcement</option>
+                                    <option value="Help">Help</option>
+                                    <option value="Job">Job</option>
+                                    <option value="Office">Office</option>
 
                                     <option style="color: #1EB332;" disabled="disabled" >--wiki--</option>
                                     <option value="Docs">Docs</option>
@@ -24,12 +24,12 @@
                                     <option value="Client">Wasm</option>
                                 </select>
                                 <select v-else name="category" v-model="Category" id="category-control">
+                                    <option value="Announce">Announce</option>
                                     <option value="Topic">Topic</option>
                                     <option value="Share">Share</option>
-                                    <option value="Article">Article</option>
-                                    <option value="FAQ">FAQ</option>
-                                    <option value="Job">Job</option>
                                     <option value="Blog">Blog</option>
+                                    <option value="Help">Help</option>
+                                    <option value="Job">Job</option>
                                 </select>
                         </span>
                         <span id="title">
@@ -37,7 +37,7 @@
                         </span>
                     </div>    
                     <div id="new">
-                                <textarea name="content" v-model="Content" placeholder="Write new Article in markdown!"></textarea>
+                                <textarea name="content" v-model="Content" placeholder="Write new content in markdown!"></textarea>
                     </div>
                     <div id="new">
                                 <button type="submit" id="submit" @click="publish" ><span class="tip"> Publish </span></button>
@@ -68,7 +68,7 @@ export default {
             var title = this.Title
             var content = this.Content
             var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-            axios.post('http://localhost:8000/api/article_new', {
+            axios.post('http://localhost:8000/api/theme_new', {
                 user_id: user_id,
                 category: category,
                 title: title,

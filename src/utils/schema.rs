@@ -8,12 +8,15 @@ table! {
     }
 }
 table! {
-    article (id) {
+    theme (id) {
         id -> Int4,
         user_id -> Int4,
         category -> Text,
+        status -> Int4,
         title -> Text,
-        body -> Text,
+        content -> Text,
+        view_count -> Int4,
+        comment_count -> Int4,
         created_at -> Timestamp,
     }
 }

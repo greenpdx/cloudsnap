@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '../pages/home/Home'
 import Wiki from '../pages/wiki/Wiki'
 import More from '../pages/more/More'
-import Article from '../pages/article/Article'
+import Theme from '../pages/theme/Theme'
 import New from '../pages/new/New'
 import Access from '../pages/user/Access'
 import SignUp from '../pages/user/SignUp'
@@ -18,7 +18,7 @@ export default new Router({
     { path: '/', name: 'home', component: Home },
     { path: '/a/wiki', name: 'wiki', component: Wiki },
     { path: '/a/more', name: 'more', component: More },
-    { path: '/a/article/:id', name: 'article', component: Article },
+    { path: '/a/theme/:id', name: 'theme', component: Theme },
     { path: '/a/new', name: 'new', component: New },
     { path: '/a/access', name: 'access', component: Access },
     { path: '/a/signup', name: 'signup', component: SignUp },

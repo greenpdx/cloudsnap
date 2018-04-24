@@ -1,2 +1,2 @@
-pub mod article;
+pub mod theme;
 pub mod user;

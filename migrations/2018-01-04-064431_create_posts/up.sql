@@ -13,20 +13,28 @@ CREATE TABLE users (
   (3, 'zzzz@163.com', 'zzzz', '$2y$12$6ofSZ3hpsGtDt6bM0WU0geDgZLLETFUVB6FpMXI61SbAvuQD5RiWK', '2017-09-08 13:00:38.353041');
  SELECT setval('users_id_seq', 3, true);
 
-CREATE TABLE  article (
+CREATE TABLE  theme (
   id SERIAL NOT NULL PRIMARY KEY,
   user_id INTEGER NOT NULL,
   category TEXT NOT NULL,
+  status INTEGER NOT NULL DEFAULT '0',
   title TEXT NOT NULL,
-  body TEXT NOT NULL,
+  content TEXT NOT NULL,
+  view_count INTEGER NOT NULL DEFAULT '0',
+  comment_count INTEGER NOT NULL DEFAULT '0',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
- INSERT INTO article (id, user_id, category, title, body, created_at) VALUES
- (1, 1, 'Topic',  'Rust Article', 'Rust 2017 Survey Results', '2017-07-24 23:41:45.672805609'),
- (2, 2, 'Article', 'The Rust Libz Blitz','This post covers the library team’s major initiative: raising a solid core of the Rust crate ecosystem to a consistent level of completeness and quality. ', '2017-07-23 23:41:45.672805609'),
- (3, 23, 'FAQ', 'Rust 2017 roadmap', 'This year, the overarching theme is productivity, especially for early-stage Rust users. ', '2017-07-23 23:41:45.672805609'),
- (4, 1, 'Share', 'Incremental Compilation', 'One of the projects that is building on these foundations, and that should help improve compile times a lot for typical workflows, is incremental compilation. ', '2017-07-24 23:41:45.672805609'),
- (5, 2, 'Job', 'Rust jobs','Today we are announcing an alpha version of incremental compilation', '2017-07-23 23:41:45.672805609'),
- (6, 3, 'Announcement', 'Introducing MIR','MIR is the key to ticking off a number of our highest priorities for Rust', '2017-07-23 23:41:45.672805609');
- SELECT setval('article_id_seq', 6, true);
+ INSERT INTO theme (id, user_id, category, status, title, content, view_count, comment_count, created_at) VALUES
+ (1, 1, 'Topic',  0, 'Rust Article', 'Rust 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
+ (2, 2, 'Blog', 0, 'The Rust Libz Blitz','This post covers the library team’s major initiative: raising a solid core of the Rust crate ecosystem to a consistent level of completeness and quality. ', 0, 0, '2017-07-23 23:41:45.672805609'),
+ (3, 3, 'Help', 0, 'Rust 2017 roadmap', 'This year, the overarching theme is productivity, especially for early-stage Rust users. ', 0, 0, '2017-07-23 23:41:45.672805609'),
+ (4, 1, 'Share', 0, 'Incremental Compilation', 'One of the projects that is building on these foundations, and that should help improve compile times a lot for typical workflows, is incremental compilation. ', 0, 0, '2017-07-24 23:41:45.672805609'),
+ (5, 2, 'Job', 0, 'Rust jobs','Today we are announcing an alpha version of incremental compilation', 0, 0, '2017-07-23 23:41:45.672805609'),
+ (6, 3, 'Office', 0, 'Introducing MIR','MIR is the key to ticking off a number of our highest priorities for Rust', 0, 0, '2017-07-23 23:41:45.672805609'),
+ (7, 1, 'Announce',  0, 'MIR Compilation', 'overarching 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
+ (8, 2, 'Topic',  0, 'Results productivity', 'announcing 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
+ (9, 1, 'Announce',  0, 'One Survey', 'overarching 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
+ (10, 2, 'Share',  0, 'Blitz productivity', 'announcing 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
+ (11, 1, 'Announce',  0, 'Survey ticking', 'overarching 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609');
+ SELECT setval('theme_id_seq', 11, true);
