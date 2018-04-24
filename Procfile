@@ -1,2 +1,2 @@
-web: ROCKET_PORT=$PORT ROCKET_ENV=production ./target/release/muro
+web: ./target/release/muro
 

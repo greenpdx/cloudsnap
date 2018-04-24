@@ -1,5 +1,5 @@
 [package]
-name = "Rust-webapp-starter"
+name = "muro"
 version = "0.1.0"
 authors = ["krircc <krircc@aliyun.com>"]
 
