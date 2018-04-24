@@ -1,42 +1,35 @@
-use diesel::prelude::*;
-use diesel::pg::PgConnection;
-use dotenv::dotenv;
-use std::env;
+use actix::*;
+use diesel::prelude::PgConnection;
+use diesel::r2d2::{ Pool, ConnectionManager };
+// use dotenv;
 
-use std::ops::Deref;
-use r2d2;
-use r2d2_diesel::ConnectionManager;
-use rocket::http::Status;
-use rocket::request::{self, FromRequest};
-use rocket::{Request, State, Outcome};
+// actix-web DbExecutor
 
-pub type PoolDsl = r2d2::Pool<ConnectionManager<PgConnection>>;
+//  pub struct DbExecutor(pub PgConnection);
 
-pub fn init_pool() -> PoolDsl {
-    let config = r2d2::Config::default();
-    let manager = ConnectionManager::<PgConnection>::new(dotenv!("DATABASE_URL"));
-    r2d2::Pool::new(config, manager).expect("diesel db pool")
+//  impl Actor for DbExecutor {
+//      type Context = SyncContext<Self>;
+//  }
+ 
+//  impl DbExecutor {
+//      pub fn new() -> DbExecutor {
+//         let db_url = dotenv::var("DATABASE_URL").expect("DATABASE_URL must be set");
+//          DbExecutor(PgConnection::establish(&db_url).expect(&format!("Error connecting to {}", db_url)))
+//      }
+//  }
+
+//  r2d2_diesel
+pub struct ConnDsl(pub Pool<ConnectionManager<PgConnection>>);
+
+impl Actor for ConnDsl {
+    type Context = SyncContext<Self>;
 }
 
-pub struct ConnDsl(pub r2d2::PooledConnection<ConnectionManager<PgConnection>>);
-
-impl Deref for ConnDsl {
-    type Target = PgConnection;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target{
-        &self.0
-    }
-}
-
-impl <'a, 'r> FromRequest<'a, 'r> for ConnDsl{
-    type Error = ();
-
-    fn from_request(request: &'a Request<'r>) -> request::Outcome<ConnDsl, () > {
-        let pool = request.guard::<State<PoolDsl>>()?;
-        match pool.get(){
-            Ok(conn) => Outcome::Success(ConnDsl(conn)),
-            Err(_) => Outcome::Failure((Status::ServiceUnavailable, ()))
-        }
-    }
-}
-
+// impl ConnDsl {
+//     pub fn new() -> ConnDsl {
+//         let db_url = dotenv::var("DATABASE_URL").expect("DATABASE_URL must be set");
+//         let manager = ConnectionManager::<PgConnection>::new(db_url);
+//         let conn = Pool::builder().build(manager).expect("Failed to create pool.");
+//         ConnDsl(conn)
+//     }
+// }

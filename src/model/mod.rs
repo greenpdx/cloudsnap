@@ -1,5 +1,4 @@
 pub mod db;
-pub mod pg;
 pub mod user;
+pub mod response;
 pub mod article;
-pub mod wiki;

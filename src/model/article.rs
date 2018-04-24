@@ -1,59 +1,52 @@
-use model::user::User;
-use utils::schema::{article,comment};
-use chrono::{DateTime,Utc};
+use actix::*;
+use actix_web::*;
+use utils::schema::article;
+use chrono::NaiveDateTime;
+use model::response::{ArticleListMsgs, ArticleMsgs, Msgs};
 
-#[derive(Clone,Debug,Serialize,Queryable, Associations)]
-#[belongs_to(User)]
+#[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable)]
 pub struct Article {
     pub id: i32,
-    pub uid: i32,
+    pub user_id: i32,
     pub category: String,
-    pub status: i32,
-    pub comments_count: i32,
     pub title: String,
-    pub raw: String,
-    pub cooked: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub body: String,
+    pub created_at: NaiveDateTime,
 }
 
-
-#[derive(Insertable)]
+#[derive(Serialize,Deserialize,Insertable,Debug, Clone)]
 #[table_name="article"]
 pub struct NewArticle<'a> {
-    pub uid: i32,
+    pub user_id: i32,
     pub category: &'a str,
-    pub status: i32,
-    pub comments_count: i32,
     pub title: &'a str,
-    pub raw: &'a str,
-    pub cooked: &'a str,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub body: &'a str,
+    pub created_at: NaiveDateTime,
 }
 
-#[derive(Clone,Debug,Serialize,Queryable,  Associations)]
-#[belongs_to(User)]
-pub struct Comment {
-    pub id: i32,
-    pub aid: i32,
-    pub uid: i32,
-    pub raw: String,
-    pub cooked: String,
-    pub created_at: DateTime<Utc>,
+#[derive(Deserialize,Serialize, Debug)]
+pub struct ArticleNew {
+    pub user_id: i32,
+    pub category: String,
+    pub title: String,
+    pub content: String,
 }
 
-#[derive(Insertable)]
-#[table_name="comment"]
-pub struct NewComment<'a> {
-    pub aid: i32,
-    pub uid: i32,
-    pub raw: &'a str,
-    pub cooked: &'a str,
-    pub created_at: DateTime<Utc>,
+#[derive(Deserialize,Serialize, Debug)]
+pub struct ArticleId {
+    pub article_id: i32,
 }
 
-pub mod STATUS {
-    pub const NORMAL: i32 = 0;
-    pub const DELETED: i32 = -1;
+pub struct ArticleList;
+
+impl Message for ArticleList {
+    type Result = Result<ArticleListMsgs, Error>;
+}
+
+impl Message for ArticleId {
+    type Result = Result<ArticleMsgs, Error>;
+}
+
+impl Message for ArticleNew {
+    type Result = Result<Msgs, Error>;
 }

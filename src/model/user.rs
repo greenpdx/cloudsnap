@@ -1,8 +1,11 @@
-use utils::schema::{users,message};
-use chrono::{DateTime,Utc,NaiveDateTime};
+use actix::*;
+use actix_web::*;
+use utils::schema::users;
+use chrono::NaiveDateTime;
+use model::response::{Msgs, SigninMsgs, UserInfoMsgs};
+use model::response::MyError;
 
-#[derive(Clone,Debug,Serialize,Identifiable,Queryable)]
-#[has_many(article,comment)]
+#[derive(Debug,Serialize,Deserialize,PartialEq,Identifiable,Queryable)]
 pub struct User {
     pub id: i32,
     pub email: String,
@@ -11,51 +14,62 @@ pub struct User {
     pub created_at: NaiveDateTime,
 }
 
-#[derive(Insertable)]
+#[derive(Debug,Serialize,Deserialize,Insertable)]
 #[table_name="users"]
 pub struct NewUser<'a> {
     pub email: &'a str,
     pub username: &'a str,
     pub password: &'a str,
-    pub created_at: DateTime<Utc>,
+    pub created_at: NaiveDateTime,
 }
 
-#[derive(Clone,Debug,Serialize,Queryable, Associations)]
-#[belongs_to(User)]
-pub struct Message {
-    pub id: i32,
-    pub aid: i32,
-    pub cid: i32,
-    pub from_uid: i32,
-    pub to_uid: i32,
-    pub raw: String,
-    pub cooked: String,
-    pub mode: i32,
-    pub status: i32,
-    pub created_at: DateTime<Utc>,
+#[derive(Deserialize,Serialize, Debug)]
+pub struct SignupUser {
+    pub username: String,
+    pub email: String,
+    pub password: String,
+    pub confirm_password: String,
+}
+#[derive(Deserialize,Serialize, Debug)]
+pub struct SigninUser {
+    pub username: String,
+    pub password: String,
 }
 
-
-#[derive(Insertable)]
-#[table_name="message"]
-pub struct NewMessage<'a> {
-    pub aid: i32,
-    pub cid: i32,
-    pub from_uid: i32,
-    pub to_uid: i32,
-    pub raw: &'a str,
-    pub cooked: &'a str,
-    pub mode: i32,
-    pub status: i32,
-    pub created_at: DateTime<Utc>,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserInfo {
+    pub user_id: String,
 }
 
-pub mod message_mode {
-    pub const REPLY_ARTICLE: i32 = 1;       
-    pub const MENTION: i32 = 2;             
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserUpdate {
+    pub user_id: i32,
+    pub newname: String,
+    pub newmail: String,
+    pub newpassword: String,
+    pub confirm_newpassword: String,
 }
 
-pub mod message_status {
-    pub const INIT: i32 = 0;                
-    pub const READ: i32 = -1;                
-}    
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserDelete {
+    pub user_id: String,
+}
+
+impl Message for SignupUser {
+    type Result = Result<Msgs, Error>;
+}
+
+impl Message for SigninUser {
+    type Result = Result<SigninMsgs, Error>;
+}
+
+impl Message for UserInfo {
+    type Result = Result<UserInfoMsgs, Error>;
+}
+
+impl Message for UserUpdate {
+    type Result = Result<Msgs, Error>;
+}
+impl Message for UserDelete {
+    type Result = Result<Msgs, MyError>;
+}
