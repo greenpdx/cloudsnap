@@ -1,5 +1,6 @@
 use actix::*;
 use actix_web::*;
+use chrono::Utc;
 use diesel::sql_types::*;
 use utils::schema::theme;
 use chrono::NaiveDateTime;
@@ -77,4 +78,18 @@ impl Message for ThemeId {
 
 impl Message for ThemeNew {
     type Result = Result<Msgs, Error>;
+}
+
+pub fn no_theme() -> Theme {
+    Theme {
+        id: 0,
+        user_id: 0,
+        category: "".to_owned(),
+        status: 0,
+        title: "".to_owned(),
+        content: "".to_owned(),
+        view_count: 0,
+        comment_count: 0,
+        created_at: Utc::now().naive_utc(),
+    }
 }

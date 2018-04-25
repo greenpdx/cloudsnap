@@ -4,8 +4,9 @@ use actix::*;
 use actix_web::*;
 use chrono::Utc;
 use model::response::{ThemeListMsgs, ThemeMsgs, Msgs};
-use model::theme::{Theme, ThemeList, ThemeId, NewTheme, ThemeNew};
+use model::theme::{Theme, ThemeList, ThemeId, NewTheme, ThemeNew, no_theme};
 use model::db::ConnDsl;
+use model::user::{User, no_user};
 
 impl Handler<ThemeList> for ConnDsl {
     type Result = Result<ThemeListMsgs, Error>;
@@ -31,43 +32,41 @@ impl Handler<ThemeId> for ConnDsl {
 
     fn handle(&mut self, theme_id: ThemeId, _: &mut Self::Context) -> Self::Result {
         use utils::schema::theme::dsl::*;
+        use utils::schema::users;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
         let the_theme =  theme.filter(&id.eq(&theme_id.theme_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?.pop();
+        let no_theme = no_theme();
+        let no_user = no_user();
         match the_theme {
-            Some(the_theme) => {
-                    let current_theme = Theme {
-                        id: the_theme.id,
-                        user_id: the_theme.user_id,
-                        category: the_theme.category.clone(),
-                        status: the_theme.status,
-                        title: the_theme.title.clone(),
-                        content: the_theme.content.clone(),
-                        view_count: the_theme.view_count,
-                        comment_count: the_theme.comment_count,
-                        created_at: the_theme.created_at.clone(),
-                    };
-                    Ok(ThemeMsgs { 
-                        status: 200,
-                        message : "The  current_user info.".to_string(),
-                        theme: current_theme,
-                    })
+            Some(themeid) => {
+                let uid = themeid.user_id;
+                let user_result = users::table.filter(&users::id.eq(uid)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match user_result {
+                    Some(themeid_user) => {
+                        Ok(ThemeMsgs { 
+                            status: 200,
+                            message : "The  theme info.".to_string(),
+                            theme: themeid,
+                            theme_user: themeid_user,
+                        })
+                    },
+                    None => {
+                        Ok(ThemeMsgs { 
+                            status: 400,
+                            message : "error.".to_string(),
+                            theme: no_theme,
+                            theme_user: no_user,
+                        })
+                    },
+                }
+                    
             },
             None => {
-                    let no_theme = Theme {
-                        id: 0,
-                        user_id: 0,
-                        category: "".to_owned(),
-                        status: 0,
-                        title: "".to_owned(),
-                        content: "".to_owned(),
-                        view_count: 0,
-                        comment_count: 0,
-                        created_at: Utc::now().naive_utc(),
-                    };
                     Ok(ThemeMsgs { 
                         status: 400,
                         message : "error.".to_string(),
                         theme: no_theme,
+                        theme_user: no_user,
                     })
             },
         }

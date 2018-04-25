@@ -39,5 +39,6 @@ pub struct ThemeMsgs {
     pub status: i32,
     pub message : String,
     pub theme : Theme,
+    pub theme_user : User,
 }
  

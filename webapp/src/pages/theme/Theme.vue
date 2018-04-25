@@ -5,7 +5,7 @@
                         <div id="title">
                             <h3> title : {{ theme.title }} </h3> 
                             <span id="info">category : {{ theme.category }}</span>  
-                            <span id="info"><a :href="'/a/user/' + theme.user_id">user_id : {{ theme.user_id }}</a></span>  
+                            <span id="info"><a :href="'/a/user/' + theme.user_id">username : {{ theme_user.username }}</a></span>  
                             <span id="info">created_at : {{ theme.created_at }}</span>  
                         </div>
                         <div id="body">content : {{ theme.content }}</div>
@@ -23,7 +23,8 @@ export default {
     },
     data: function() {
         return {
-            theme: ''
+            theme: '',
+            theme_user: ''
         }
     },
     mounted: function() {
@@ -32,7 +33,9 @@ export default {
     axios.get("http://localhost:8000/api/" + this.$route.params.id)
       .then((response) => {
         this.theme = response.data.theme
+        this.theme_user = response.data.theme_user
         console.log(response.data.theme)
+        console.log(response.data.theme_user)
       })
       .catch((e) => {
         console.log(e)
