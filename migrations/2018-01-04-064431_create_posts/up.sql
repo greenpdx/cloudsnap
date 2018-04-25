@@ -38,3 +38,35 @@ CREATE TABLE  theme (
  (10, 2, 'Share',  0, 'Blitz productivity', 'announcing 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
  (11, 1, 'Announce',  0, 'Survey ticking', 'overarching 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609');
  SELECT setval('theme_id_seq', 11, true);
+
+ CREATE TABLE  comment (
+  id SERIAL NOT NULL PRIMARY KEY,
+  theme_id integer NOT NULL,
+  user_id integer NOT NULL,
+  content text NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ INSERT INTO comment (id, theme_id, user_id, content, created_at) VALUES
+ (1, 1, 1, 'Faster execution time', '2017-07-23 23:41:45.672805609'),
+ (2, 1, 1, 'Faster compilation time', '2017-07-23 23:41:45.672805609'),
+ (3, 3, 2, 'More precise type checking.', '2017-07-23 23:41:45.672805609'),
+ (4, 2, 2, 'Eliminating redundancy！', '2017-07-23 23:41:45.672805609'),
+ (5, 4, 2, 'Raising ambitions！', '2017-07-23 23:41:45.672805609'),
+ (6, 5, 2, 'MIR construction is type-driven', '2017-07-23 23:41:45.672805609'),
+ (7, 2, 2, 'Some MIR primitives are more powerful than the structured construct they replace', '2017-07-23 23:41:45.672805609'),
+ (8, 2, 2, 'MIR makes all types explicit', '2017-07-23 23:41:45.672805609'),
+ (9, 1, 1, 'Faster execution time', '2017-07-23 23:41:45.672805609');
+  SELECT setval('comment_id_seq', 9, true);
+
+  CREATE TABLE message (
+  id SERIAL NOT NULL PRIMARY KEY,
+  theme_id integer NOT NULL,
+  comment_id integer NOT NULL,
+  from_user_id integer NOT NULL,
+  to_user_id integer NOT NULL,
+  content text NOT NULL,
+  type integer NOT NULL DEFAULT '0',
+  status integer NOT NULL DEFAULT '0',
+  created_at timestamp with time zone NOT NULL
+);

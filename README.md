@@ -1,4 +1,7 @@
 # muro
+
+[![Build Status](https://travis-ci.org/OUIRC/muro.svg?branch=master)](https://travis-ci.org/OUIRC/muro)
+
 The muro library for modern community.
 >this is muro-v2. the muro-v1 is [here](https://github.com/something-here/muro)
 

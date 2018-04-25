@@ -92,7 +92,8 @@ export default {
     margin: 4px auto;
     width: 100%;
     line-height: 33px;
-    background-color:rgb(231, 236, 235);
+    border :1px solid #CAC1C1;
+    background-color: #FFFFFF;
 }
 form #topic-group {
    margin: 11px 0 11px 0;

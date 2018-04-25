@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <div id="body">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -26,5 +28,9 @@ a:hover { color: var(--purple); }
 
 ul, ol, li {
     list-style: none;
+}
+#body {
+  background-color: #faf5f5;
+  min-height: 100vh;
 }
 </style>
