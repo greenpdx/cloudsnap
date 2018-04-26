@@ -3,8 +3,9 @@ use actix_web::*;
 use chrono::Utc;
 use diesel::sql_types::*;
 use utils::schema::theme;
+use utils::schema::comment;
 use chrono::NaiveDateTime;
-use model::response::{ThemeListMsgs, ThemeMsgs, Msgs};
+use model::response::{ThemeListMsgs, ThemeAndCommentMsgs, Msgs};
 
 #[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable)]
 pub struct Theme {
@@ -29,6 +30,24 @@ pub struct NewTheme<'a> {
     pub created_at: NaiveDateTime,
 }
 
+#[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable)]
+pub struct Comment {
+    pub id: i32,
+    pub theme_id: i32,
+    pub user_id: i32,
+    pub content: String,
+    pub created_at: NaiveDateTime,
+}
+
+#[derive(Serialize,Deserialize,Insertable,Debug, Clone)]
+#[table_name="comment"]
+pub struct NewComment<'a> {
+    pub theme_id: i32,
+    pub user_id: i32,
+    pub content: &'a str,
+    pub created_at: NaiveDateTime,
+}
+
 #[derive(Deserialize,Serialize, Debug)]
 pub struct ThemeNew {
     pub user_id: i32,
@@ -40,6 +59,13 @@ pub struct ThemeNew {
 #[derive(Deserialize,Serialize, Debug)]
 pub struct ThemeId {
     pub theme_id: i32,
+}
+
+#[derive(Deserialize,Serialize, Debug)]
+pub struct ThemeComment {
+    pub user_id: i32,
+    pub the_theme_id: String,
+    pub comment: String,
 }
 
 pub struct ThemeList;
@@ -73,10 +99,13 @@ impl Message for ThemeList {
 }
 
 impl Message for ThemeId {
-    type Result = Result<ThemeMsgs, Error>;
+    type Result = Result<ThemeAndCommentMsgs, Error>;
 }
 
 impl Message for ThemeNew {
+    type Result = Result<Msgs, Error>;
+}
+impl Message for ThemeComment {
     type Result = Result<Msgs, Error>;
 }
 
@@ -90,6 +119,16 @@ pub fn no_theme() -> Theme {
         content: "".to_owned(),
         view_count: 0,
         comment_count: 0,
+        created_at: Utc::now().naive_utc(),
+    }
+}
+
+pub fn no_comment() -> Comment {
+    Comment {
+        id: 0,
+        theme_id: 0,
+        user_id: 0,
+        content: "".to_owned(),
         created_at: Utc::now().naive_utc(),
     }
 }

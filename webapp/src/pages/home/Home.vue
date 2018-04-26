@@ -29,8 +29,8 @@
                           <span id="right">
                               <span id="info"> {{ theme.category }} </span>
                               <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                              <span id="info"> {{ theme.id }} </span>
-                              <span id="info"> {{ theme.id }} </span>
+                              <span id="info"> {{ theme.view_count }} </span>
+                              <span id="info"> {{ theme.comment_count }} </span>
                               <span > {{ theme.created_at }} </span>
                           </span>                        
                       </div>
@@ -41,8 +41,8 @@
                         <span id="right">
                             <span id="info"> {{ theme.category }} </span>
                             <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                            <span id="info"> {{ theme.id }} </span>
-                            <span id="info"> {{ theme.id }} </span>
+                            <span id="info"> {{ theme.view_count }} </span>
+                            <span id="info"> {{ theme.comment_count }} </span>
                             <span > {{ theme.created_at }} </span>
                         </span>
                       </div>
@@ -88,12 +88,13 @@ main {
     padding-bottom: 44px;
 }
 #center {
-  box-shadow: 0 1px 1px #cccccc;
+  box-shadow: 0 1px 1px #faf5f5;
+  background-color: #ffffff;
 }
 #center #header {
   height: 50px;
-  background-color: rgb(215, 248, 237); 
-  /* box-shadow: 0 -3px 3px rgba(0,0,0,0.12), 0 -1px 1px rgba(0,0,0,0.24); */
+  background-color: #faf5f5;
+  box-shadow: 0 0 3px rgba(0,0,0,0.1), 0 -1px 1px rgba(0,0,0,0.1);
 }
 #center #header #first {
   margin-left: 1vw;
@@ -102,11 +103,13 @@ main {
   display: inline-block;
   line-height: 50px;
   margin-left: 5vw;
+  font-size: 1.1rem;
   font-weight: bold;
 }
 #center #title {
   line-height: 44px;
-  border-bottom: 1px solid rgb(231, 238, 233);
+  color: #333333;
+  border-bottom: 1px solid rgb(212, 212, 212);
 }
 #center #title #right #info {
   padding-right: 4vw;
@@ -116,7 +119,7 @@ main {
   border-bottom: 1px solid rgb(231, 238, 233);
 }
 #center #office {
-  color: #eb15ce;
+  color: #b93bf3;
 }
 #center #items #item a {
   color: #0541af;

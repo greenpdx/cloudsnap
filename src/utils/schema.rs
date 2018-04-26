@@ -20,3 +20,12 @@ table! {
         created_at -> Timestamp,
     }
 }
+table! {
+    comment (id) {
+        id -> Int4,
+        theme_id -> Int4,
+        user_id -> Int4,
+        content -> Text,
+        created_at -> Timestamp,
+    }
+}

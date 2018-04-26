@@ -57,9 +57,9 @@ export default {
     },
     data () {
         return {
-        Category: '',
-        Title: '',
-        Content: ''
+            Category: '',
+            Title: '',
+            Content: ''
         }
     },
     methods: {
@@ -113,7 +113,7 @@ form #new textarea {
 }
 form #new button {
     width:63px; 
-    line-height:30px;
+    line-height:25px;
     background-color:rgb(255, 255, 255);
     border :1px solid #a39c9c;
 }

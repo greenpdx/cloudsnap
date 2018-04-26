@@ -30,7 +30,7 @@ mod utils;
 use model::db::ConnDsl;
 use api::index::{AppState, home, path};
 use api::auth::{signup, signin};
-use api::theme::{theme,theme_list, theme_new};
+use api::theme::{theme_and_comments,theme_list, theme_new, theme_add_comment};
 use api::user::{user_info, user_delete, user_update};
 
 fn main() {
@@ -60,7 +60,10 @@ fn main() {
             .resource("/api/user_update", |r| { r.method(Method::POST).with2(user_update); })
             .resource("/api/theme_list", |r| { r.method(Method::GET).h(theme_list); })
             .resource("/api/theme_new", |r| { r.method(Method::POST).with2(theme_new); })
-            .resource("/api/{theme_id}", |r| { r.method(Method::GET).h(theme); })
+            .resource("/api/{theme_id}", |r| { 
+                r.method(Method::GET).h(theme_and_comments); 
+                r.method(Method::POST).with2(theme_add_comment); 
+            })
             .register())
             .handler("/", fs::StaticFiles::new("public")))
         .bind("127.0.0.1:8000").unwrap()

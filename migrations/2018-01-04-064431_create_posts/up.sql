@@ -26,11 +26,11 @@ CREATE TABLE  theme (
 );
 
  INSERT INTO theme (id, user_id, category, status, title, content, view_count, comment_count, created_at) VALUES
- (1, 1, 'Topic',  0, 'Rust Article', 'Rust 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
- (2, 2, 'Blog', 0, 'The Rust Libz Blitz','This post covers the library team’s major initiative: raising a solid core of the Rust crate ecosystem to a consistent level of completeness and quality. ', 0, 0, '2017-07-23 23:41:45.672805609'),
- (3, 3, 'Help', 0, 'Rust 2017 roadmap', 'This year, the overarching theme is productivity, especially for early-stage Rust users. ', 0, 0, '2017-07-23 23:41:45.672805609'),
- (4, 1, 'Share', 0, 'Incremental Compilation', 'One of the projects that is building on these foundations, and that should help improve compile times a lot for typical workflows, is incremental compilation. ', 0, 0, '2017-07-24 23:41:45.672805609'),
- (5, 2, 'Job', 0, 'Rust jobs','Today we are announcing an alpha version of incremental compilation', 0, 0, '2017-07-23 23:41:45.672805609'),
+ (1, 1, 'Topic',  0, 'Rust Article', 'Rust 2017 Survey Results', 0, 3, '2017-07-24 23:41:45.672805609'),
+ (2, 2, 'Blog', 0, 'The Rust Libz Blitz','This post covers the library team’s major initiative: raising a solid core of the Rust crate ecosystem to a consistent level of completeness and quality. ', 0, 3, '2017-07-23 23:41:45.672805609'),
+ (3, 3, 'Help', 0, 'Rust 2017 roadmap', 'This year, the overarching theme is productivity, especially for early-stage Rust users. ', 0, 1, '2017-07-23 23:41:45.672805609'),
+ (4, 1, 'Share', 0, 'Incremental Compilation', 'One of the projects that is building on these foundations, and that should help improve compile times a lot for typical workflows, is incremental compilation. ', 0, 1, '2017-07-24 23:41:45.672805609'),
+ (5, 2, 'Job', 0, 'Rust jobs','Today we are announcing an alpha version of incremental compilation', 0, 1, '2017-07-23 23:41:45.672805609'),
  (6, 3, 'Office', 0, 'Introducing MIR','MIR is the key to ticking off a number of our highest priorities for Rust', 0, 0, '2017-07-23 23:41:45.672805609'),
  (7, 1, 'Announce',  0, 'MIR Compilation', 'overarching 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),
  (8, 2, 'Topic',  0, 'Results productivity', 'announcing 2017 Survey Results', 0, 0, '2017-07-24 23:41:45.672805609'),

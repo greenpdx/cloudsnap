@@ -2,18 +2,18 @@ use actix_web::{HttpMessage, HttpRequest, HttpResponse, State, Json, AsyncRespon
 use futures::future::Future;
 
 use api::index::AppState;
-use model::theme::{ThemeList, ThemeId, ThemeNew};
+use model::theme::{ThemeList, ThemeId, ThemeNew, ThemeComment};
 
 
-pub fn theme(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
+pub fn theme_and_comments(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
     let header_theme_id = req.match_info().get("theme_id").unwrap();
     let theme_id: i32 = header_theme_id.parse().unwrap();
     req.state().db.send(ThemeId{theme_id})
        .from_err()
        .and_then(|res| {
            match res {
-               Ok(theme) =>
-                   Ok(HttpResponse::Ok().json(theme)),
+               Ok(msg) =>
+                   Ok(HttpResponse::Ok().json(msg)),
                Err(_) =>
                    Ok(HttpResponse::InternalServerError().into()),
            }
@@ -49,3 +49,17 @@ pub fn theme_new(theme_new: Json<ThemeNew>, state: State<AppState>) -> FutureRes
         }).responder()
 }
 
+pub fn theme_add_comment(theme_comment: Json<ThemeComment>, state: State<AppState>) -> FutureResponse<HttpResponse> {
+    state.db.send(ThemeComment{ 
+            the_theme_id: theme_comment.the_theme_id.clone(),
+            user_id: theme_comment.user_id,
+            comment: theme_comment.comment.clone(),
+        })
+        .from_err()
+        .and_then(|res| {
+            match res {
+                Ok(msg) => Ok(HttpResponse::Ok().json(msg)),
+                Err(_) => Ok(HttpResponse::InternalServerError().into())
+            }
+        }).responder()
+}

@@ -1,4 +1,5 @@
 use model::user::User;
+use model::theme::Comment;
 use model::theme::{Theme, ThemeListResult};
 
 pub enum MyError {
@@ -35,10 +36,11 @@ pub struct UserInfoMsgs {
 }
 
 #[derive(Deserialize,Serialize, Debug)]
-pub struct ThemeMsgs {
+pub struct ThemeAndCommentMsgs {
     pub status: i32,
     pub message : String,
     pub theme : Theme,
     pub theme_user : User,
+    pub theme_comment: Vec<Comment>,
 }
  
