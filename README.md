@@ -51,13 +51,13 @@ then open broswer 'http://localhost:8000/'
 
 ### <a name="screenshots"> What it looks like </a>
 
-<img alt="Home" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/home.png">
+<img alt="Home" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/home.png">
 
-<img alt="theme" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/theme.png">
+<img alt="theme" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/theme.png">
 
-<img alt="publish" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/publish.png">
+<img alt="publish" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/publish.png">
 
-<img alt="auth" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/auth.png">
+<img alt="auth" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/auth.png">
 
 
 ## Contribute
