@@ -1,25 +1,45 @@
 <template>
     <div id="center">
       <mnav id="mnav"></mnav>
-      <div id="content">
-        <div id="user-center"><p>Uaer Center</p></div>
-        <p><strong>Welcome to the user center. You must first login to see user info!</strong></p>
-        <p>email : {{ email }}</p>
-        <p>username ：{{ username }}</p>
-        <p>created_time : {{ created_time }}</p>
-        <button id="submit" v-if="username == ''" @click="login">Login</button><br/>
-        <button id="submit" v-if="username != ''" @click="update">Update My-Account</button><br/>
-        <button id="submit" v-if="username != ''" @click="deleteme">Delete My-Account</button><br/>
+      <div id="show"><img src="https://sfault-avatar.b0.upaiyun.com/327/537/3275374482-59ebf6fe6c1ce_huge256" /></div>
+      <div id="title">
+          <ul>
+              <li>Topic</li>
+              <li>Comment</li>
+              <li>Message</li>
+              <li>Save</li>
+          </ul>
+      </div>
+      <div id="body">
+        <div id="container">
+            <div id="left">
+                <p><strong>{{ username }}</strong></p>
+                <p><strong>{{ email }}</strong></p>
+                <p>created_time : {{ created_time }}</p>
 
-        <div id="update" v-if="userupdate == true">
-            <p>Account Update</p> 
-              <input type="text" name="newname" placeholder="Newname" v-model="Newname"  required /><br/>
-              <input type="text" name="newmail" placeholder="Newmail" v-model="Newmail"  required /><br/>
-              <input type="password" name="newpassword" placeholder="Newpassword" v-model="Newpassword"  required/><br/>
-              <input type="password" name="confirm_newpassword" placeholder="Confirm Newpassword" v-model="ConfirmNewpassword"  required/><br/>
-              <button id="submit" @click="submitnow">UpdateNow</button>
-            
+                <button id="submit" v-if="username == ''" @click="login">Login</button><br/>
+                <button id="submit" v-if="username != ''" @click="update">Update My-Account</button><br/>
+                <button id="submit" v-if="username != ''" @click="deleteme">Delete My-Account</button><br/>
+
+                <div id="update" v-if="userupdate == true">
+                  <p>Account Update</p> 
+                    <input type="text" name="newname" placeholder="Newname" v-model="Newname"  required /><br/>
+                    <input type="text" name="newmail" placeholder="Newmail" v-model="Newmail"  required /><br/>
+                    <input type="password" name="newpassword" placeholder="Newpassword" v-model="Newpassword"  required/><br/>
+                    <input type="password" name="confirm_newpassword" placeholder="Confirm Newpassword" v-model="ConfirmNewpassword"  required/><br/>
+                    <button id="submit" @click="submitnow">UpdateNow</button>
+              </div>
+            </div>
+            <div id="right">
+                <p>My Topic</p>
+                <p>My Comment</p>
+                <p>My Message</p>
+            </div>
         </div>
+        
+        
+
+        
       </div>
     </div>
 </template>
@@ -107,27 +127,105 @@ export default {
 </script>
 
 <style scoped>
+#show {
+    background-color: aquamarine;
+}
+#title {
+    line-height: 4rem;
+    background-color: #faeaf5;
+}
 @media only screen and (max-width: 600px) {
-    #content  {
-      margin: 0.5rem auto;
+  img {
+      margin: 0.3rem 1rem 0.1rem;
+      width: 5rem;
+      height: 5rem;
+  }
+  #title ul li {
+      display: inline-block;
+      padding-left: 1rem;
+      font-weight: bold;
+  }
+  #body  {
+      margin: 1rem;
       width: 95%;
+  }
+  #body #container #right {
+      margin: 1rem auto;
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
-    #content  {
+  #show {
+      padding-top: 6rem;
+  }
+  img {
+      margin-left: 14%;
+      width: 8rem;
+      height: 8rem;
+  }
+  #title ul {
+      margin-left: 33%;
+  }
+  #title ul li {
+      display: inline-block;
+      padding-left: 2rem;
+      font-weight: bold;
+  }
+  #body  {
       margin: 0 auto;
       width: 72%;
-      padding-top: 77px;
+      padding-top: 2rem;
+  }
+  #body #container {
+    display: flex;
+    flex-flow: row;
+  }
+  #body #container #left {
+      width: 33%;
+      padding-right: 1rem;
+  }
+  #body #container #right {
+      flex: 1;
+  }
+  #body #container #left #update {
+    margin: 2rem auto;
   }
 }
 @media only screen and (min-width: 1000px) {
-  #content  {
+  #show {
+      padding-top: 6rem;
+  }
+  img {
+      margin-left: 17%;
+      width: 8rem;
+      height: 8rem;
+  }
+  #title ul {
+      margin-left: 33vw;
+  }
+  #title ul li {
+      display: inline-block;
+      padding-left: 2rem;
+      font-weight: bold;
+  }
+  #body  {
       margin: 0 auto;
       width: 66%;
-      padding-top: 77px;
+      padding-top: 2rem;
   }
-  #update {
-    margin: 3rem auto;
+
+  #body #container {
+    display: flex;
+    flex-flow: row;
+  }
+  #body #container #left {
+      width: 29%;
+      padding-right: 1rem;
+  }
+  #body #container #right {
+      flex: 1;
+  }
+  #body #container #left #update {
+    margin: 2rem auto;
   }
 }
 </style>
