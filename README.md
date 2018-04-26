@@ -49,7 +49,15 @@ $ cargo run
 ```
 then open broswer 'http://localhost:8000/'
 
-<img alt="Home" height="500" src="https://raw.githubusercontent.com/OUISRC/Rust-webapp-starter/master/2018-04-04%2017-06-57.png">
+### <a name="screenshots"> What it looks like </a>
+
+<img alt="Home" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/home.png">
+
+<img alt="theme" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/theme.png">
+
+<img alt="publish" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/publish.png">
+
+<img alt="auth" height="300" width="500" src="https://raw.githubusercontent.com/OUISRC/muro/master/auth.png">
 
 
 ## Contribute
