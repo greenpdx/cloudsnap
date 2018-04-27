@@ -9,7 +9,7 @@
                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme_user.username }}</a></span> •   
                     <span id="info">{{ theme.created_at }}</span>  
                 </div>
-                <div id="content">{{ theme.content }}</div>
+                <div id="content" v-html="theme.content" ></div>
             </div>
             <hr>
             <div id="comment">
@@ -20,7 +20,7 @@
                             <span id="info" style="font-weight: bold; color: #D10303;">{{ index + 1 }} </span>
                             <span id="info"><a :href="'/a/user/' + comment.user_id">{{ comment.user_id }}</a></span> • <span id="info">{{ comment.created_at }}</span>
                         </div>
-                        <div id="content">{{ comment.content }} </div>
+                        <div id="content" v-html="comment.content" > </div>
                     </div>
                 </div>
             </div>

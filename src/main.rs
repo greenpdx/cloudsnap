@@ -16,6 +16,7 @@ extern crate http;
 extern crate ring;
 extern crate data_encoding;
 extern crate postgres;
+extern crate pulldown_cmark;
 
 use actix::*;
 use actix_web::{server, App, http::{header, Method}, fs, middleware, middleware::cors::Cors};

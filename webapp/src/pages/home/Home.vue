@@ -70,7 +70,8 @@ export default {
   mounted: function() {
     axios.get('http://localhost:8000/api/theme_list', auth.getAuthHeader())
       .then((response) => {
-        this.theme_list = response.data.theme_list.reverse()
+        // this.theme_list = response.data.theme_list.reverse()
+        this.theme_list = response.data.theme_list
         console.log(response.data.theme_list)
         console.log(sessionStorage.getItem('token'))
         console.log(JSON.parse(sessionStorage.getItem('signin_user')).username)

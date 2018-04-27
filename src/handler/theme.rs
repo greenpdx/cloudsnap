@@ -7,6 +7,7 @@ use model::response::{ThemeListMsgs, ThemeAndCommentMsgs, Msgs};
 use model::theme::{Theme, ThemeList, ThemeId, NewTheme, ThemeNew, Comment, NewComment, ThemeComment, no_theme, no_comment};
 use model::db::ConnDsl;
 use model::user::{User, no_user};
+use utils::render::markdown_to_html;
 
 impl Handler<ThemeList> for ConnDsl {
     type Result = Result<ThemeListMsgs, Error>;
@@ -37,13 +38,17 @@ impl Handler<ThemeId> for ConnDsl {
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
         diesel::update(theme).filter(&id.eq(&theme_id.theme_id)).set((view_count.eq(view_count + 1),)).execute(conn).map_err(error::ErrorInternalServerError)?;
         let the_theme =  theme.filter(&id.eq(&theme_id.theme_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?.pop();
-        let theme_comment = comment::table.filter(&comment::theme_id.eq(&theme_id.theme_id)).load::<Comment>(conn).map_err(error::ErrorInternalServerError)?;
+        let mut theme_comment = comment::table.filter(&comment::theme_id.eq(&theme_id.theme_id)).load::<Comment>(conn).map_err(error::ErrorInternalServerError)?;
+        for comment in &mut theme_comment {
+            comment.content = markdown_to_html(&comment.content);
+        }
         let no_theme = no_theme();
         let no_user = no_user();
         let no_comment = no_comment();
         let no_comments = vec![no_comment; 0];
         match the_theme {
-            Some(themeid) => {
+            Some(mut themeid) => {
+                themeid.content = markdown_to_html(&themeid.content);
                 let uid = themeid.user_id;
                 let user_result = users::table.filter(&users::id.eq(uid)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
                 match user_result {
