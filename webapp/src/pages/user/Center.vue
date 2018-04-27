@@ -18,8 +18,8 @@
                 <p>created_time : {{ created_time }}</p>
 
                 <button id="submit" v-if="username == ''" @click="login">Login</button><br/>
-                <button id="submit" v-if="username != ''" @click="update">Update My-Account</button><br/>
-                <button id="submit" v-if="username != ''" @click="deleteme">Delete My-Account</button><br/>
+                <button id="submit" v-if="username != ''" @click="update">Update Account</button><br/>
+                <button id="submit" v-if="username != ''" @click="deleteme">Delete Account</button><br/>
 
                 <div id="update" v-if="userupdate == true">
                   <p>Account Update</p> 
@@ -131,8 +131,14 @@ export default {
     background-color: aquamarine;
 }
 #title {
-    line-height: 4rem;
+    line-height: 3.5rem;
     background-color: #faeaf5;
+}
+button {
+    width: 7rem; 
+    line-height:25px;
+    background-color:#ffffff;
+    border :1px solid #a39c9c;
 }
 @media only screen and (max-width: 600px) {
   img {
@@ -220,6 +226,9 @@ export default {
   #body #container #left {
       width: 29%;
       padding-right: 1rem;
+  }
+   #body #container #left p, #body #container #left button {
+      margin-bottom: 0.4rem;
   }
   #body #container #right {
       flex: 1;

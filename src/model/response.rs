@@ -1,5 +1,5 @@
 use model::user::User;
-use model::theme::Comment;
+use model::theme::{Comment, CommentReturn};
 use model::theme::{Theme, ThemeListResult};
 
 pub enum MyError {
@@ -41,6 +41,7 @@ pub struct ThemeAndCommentMsgs {
     pub message : String,
     pub theme : Theme,
     pub theme_user : User,
-    pub theme_comment: Vec<Comment>,
+    pub theme_comment: Vec<CommentReturn>,
+    pub theme_rtime: String,
 }
  

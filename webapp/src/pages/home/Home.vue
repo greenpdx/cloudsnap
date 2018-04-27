@@ -31,7 +31,7 @@
                               <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
                               <span id="info"> {{ theme.view_count }} </span>
                               <span id="info"> {{ theme.comment_count }} </span>
-                              <span > {{ theme.created_at }} </span>
+                              <span > {{ theme.rtime }} </span>
                           </span>                        
                       </div>
                   </div>
@@ -43,7 +43,7 @@
                             <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
                             <span id="info"> {{ theme.view_count }} </span>
                             <span id="info"> {{ theme.comment_count }} </span>
-                            <span > {{ theme.created_at }} </span>
+                            <span > {{ theme.rtime }} </span>
                         </span>
                       </div>
                   </div>
@@ -70,8 +70,8 @@ export default {
   mounted: function() {
     axios.get('http://localhost:8000/api/theme_list', auth.getAuthHeader())
       .then((response) => {
-        // this.theme_list = response.data.theme_list.reverse()
-        this.theme_list = response.data.theme_list
+        this.theme_list = response.data.theme_list.reverse()
+        // this.theme_list = response.data.theme_list
         console.log(response.data.theme_list)
         console.log(sessionStorage.getItem('token'))
         console.log(JSON.parse(sessionStorage.getItem('signin_user')).username)
@@ -112,6 +112,10 @@ main {
   color: #333333;
   border-bottom: 1px solid rgb(212, 212, 212);
 }
+#center #right {
+  float: right;
+  padding-right: 1vw;
+}
 #center #title #right #info {
   padding-right: 4vw;
 }
@@ -129,12 +133,9 @@ main {
 #center #title-topic, #office-title, #item-title {
   padding: 0 2vw 0 1vw;
 }
-#center #right {
-  float: right;
-  padding-right: 1vw;
-}
-#center #right #info {
-  padding-right: 3vw;
+
+#center #content #right #info {
+  padding-right: 4.7vw;
 }
 @media only screen and (max-width: 600px) {
     main{

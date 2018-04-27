@@ -1,8 +1,7 @@
 use actix::*;
 use actix_web::*;
-use chrono::Utc;
 use utils::schema::users;
-use chrono::NaiveDateTime;
+use chrono::{Utc, NaiveDateTime};
 use model::response::{Msgs, SigninMsgs, UserInfoMsgs};
 use model::response::MyError;
 

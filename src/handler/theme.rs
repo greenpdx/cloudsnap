@@ -2,28 +2,54 @@ use diesel;
 use diesel::*;
 use actix::*;
 use actix_web::*;
-use chrono::Utc;
+use timeago;
+use chrono::{Utc, Datelike, Timelike, NaiveDateTime};
 use model::response::{ThemeListMsgs, ThemeAndCommentMsgs, Msgs};
-use model::theme::{Theme, ThemeList, ThemeId, NewTheme, ThemeNew, Comment, NewComment, ThemeComment, no_theme, no_comment};
+use model::theme::{themelist, Theme, ThemeList, ThemeListResult, ThemeId, NewTheme, 
+                   ThemeNew, Comment, CommentReturn, NewComment, ThemeComment, commen_return, no_theme, no_comment};
 use model::db::ConnDsl;
 use model::user::{User, no_user};
-use utils::render::markdown_to_html;
+use utils::{time, markdown_to_html};
 
 impl Handler<ThemeList> for ConnDsl {
     type Result = Result<ThemeListMsgs, Error>;
 
     fn handle(&mut self, theme_list: ThemeList, _: &mut Self::Context) -> Self::Result {
         use utils::schema::theme::dsl::*;
+        use utils::schema::users;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let themes = sql_query(
-            "SELECT theme.id, theme.user_id, theme.category, theme.status, theme.title, theme.content,
-                           theme.view_count, theme.comment_count, theme.created_at, users.username 
-                           FROM theme, users WHERE theme.user_id = users.id ORDER BY theme.id DESC "
-            ).load(conn).map_err(error::ErrorInternalServerError)?;
+        let mut themes = theme.load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+        let mut themes_list: Vec<ThemeListResult> = vec![];
+        for theme_one in themes {
+            let mut themes_list_one = themelist();
+            themes_list_one.id = theme_one.id;
+            themes_list_one.user_id = theme_one.user_id;
+            themes_list_one.category = theme_one.category;
+            themes_list_one.status = theme_one.status;
+            themes_list_one.title = theme_one.title;
+            themes_list_one.content = theme_one.content;
+            themes_list_one.view_count = theme_one.view_count;
+            themes_list_one.comment_count = theme_one.comment_count;
+            themes_list_one.created_at = theme_one.created_at;
+            let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
+            themes_list_one.rtime = rtime;
+            let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+            match theme_user {
+                Some(user) => {
+                        themes_list_one.username = user.username;
+                },
+                None => {
+                        themes_list_one.username = "".to_string();
+                },
+            }
+            {
+                themes_list.push(themes_list_one)
+            }
+        }
         Ok(ThemeListMsgs { 
             status: 200,
             message : "theme_list result.".to_string(),
-            theme_list: themes,
+            theme_list: themes_list,
         })
     }
 }
@@ -39,15 +65,30 @@ impl Handler<ThemeId> for ConnDsl {
         diesel::update(theme).filter(&id.eq(&theme_id.theme_id)).set((view_count.eq(view_count + 1),)).execute(conn).map_err(error::ErrorInternalServerError)?;
         let the_theme =  theme.filter(&id.eq(&theme_id.theme_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?.pop();
         let mut theme_comment = comment::table.filter(&comment::theme_id.eq(&theme_id.theme_id)).load::<Comment>(conn).map_err(error::ErrorInternalServerError)?;
+        let mut comment_list: Vec<CommentReturn> = vec![];
         for comment in &mut theme_comment {
-            comment.content = markdown_to_html(&comment.content);
+            let mut comment_list_one = commen_return();
+            comment_list_one.id = comment.id;
+            comment_list_one.theme_id = comment.theme_id;
+            comment_list_one.user_id = comment.user_id;
+            comment_list_one.content = markdown_to_html(&comment.content);
+            comment_list_one.created_at = comment.created_at;
+            let comment_user = users::table.filter(&users::id.eq(comment.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+            match comment_user {
+                    Some(someuser) => {  comment_list_one.username = someuser.username; },
+                    None => { comment_list_one.username = "".to_string(); },
+            }
+            let rtime = time(Utc::now().naive_utc(), comment.created_at);
+            comment_list_one.rtime = rtime;
+            comment_list.push(comment_list_one);
         }
         let no_theme = no_theme();
         let no_user = no_user();
         let no_comment = no_comment();
-        let no_comments = vec![no_comment; 0];
+        let no_comments = vec![];
         match the_theme {
             Some(mut themeid) => {
+                let theme_rtime = time(Utc::now().naive_utc(), themeid.created_at);
                 themeid.content = markdown_to_html(&themeid.content);
                 let uid = themeid.user_id;
                 let user_result = users::table.filter(&users::id.eq(uid)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
@@ -58,7 +99,8 @@ impl Handler<ThemeId> for ConnDsl {
                             message : "The  theme info.".to_string(),
                             theme: themeid,
                             theme_user: themeid_user,
-                            theme_comment: theme_comment,
+                            theme_comment: comment_list,
+                            theme_rtime : theme_rtime,
                         })
                     },
                     None => {
@@ -68,6 +110,7 @@ impl Handler<ThemeId> for ConnDsl {
                             theme: no_theme,
                             theme_user: no_user,
                             theme_comment: no_comments,
+                            theme_rtime : "".to_string(),
                         })
                     },
                 }
@@ -80,6 +123,7 @@ impl Handler<ThemeId> for ConnDsl {
                         theme: no_theme,
                         theme_user: no_user,
                         theme_comment: no_comments,
+                        theme_rtime : "".to_string(),
                     })
             },
         }

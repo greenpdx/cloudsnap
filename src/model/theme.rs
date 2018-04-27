@@ -1,10 +1,9 @@
 use actix::*;
 use actix_web::*;
-use chrono::Utc;
+use chrono::{Utc, NaiveDateTime};
 use diesel::sql_types::*;
 use utils::schema::theme;
 use utils::schema::comment;
-use chrono::NaiveDateTime;
 use model::response::{ThemeListMsgs, ThemeAndCommentMsgs, Msgs};
 
 #[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable)]
@@ -48,7 +47,7 @@ pub struct NewComment<'a> {
     pub created_at: NaiveDateTime,
 }
 
-#[derive(Deserialize,Serialize, Debug)]
+#[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeNew {
     pub user_id: i32,
     pub category: String,
@@ -56,42 +55,45 @@ pub struct ThemeNew {
     pub content: String,
 }
 
-#[derive(Deserialize,Serialize, Debug)]
+#[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeId {
     pub theme_id: i32,
 }
 
-#[derive(Deserialize,Serialize, Debug)]
+#[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeComment {
     pub user_id: i32,
     pub the_theme_id: String,
     pub comment: String,
 }
 
+#[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeList;
 
-#[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable,QueryableByName)]
+#[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeListResult {
-    #[sql_type = "Integer"]
     pub id: i32,
-    #[sql_type = "Integer"]
     pub user_id: i32,
-    #[sql_type = "Text"]
     pub category: String,
-    #[sql_type = "Integer"]
     pub status: i32,
-    #[sql_type = "Text"]
     pub title: String,
-    #[sql_type = "Text"]
     pub content: String,
-    #[sql_type = "Integer"]
     pub view_count: i32,
-    #[sql_type = "Integer"]
     pub comment_count: i32,
-    #[sql_type = "Timestamp"]
     pub created_at: NaiveDateTime,
-    #[sql_type = "Text"]
     pub username: String,
+    pub rtime: String,
+}
+
+#[derive(Deserialize,Serialize, Debug,Clone)]
+pub struct CommentReturn {
+    pub id: i32,
+    pub theme_id: i32,
+    pub user_id: i32,
+    pub content: String,
+    pub created_at: NaiveDateTime,
+    pub username: String,
+    pub rtime: String,
 }
 
 impl Message for ThemeList {
@@ -123,12 +125,42 @@ pub fn no_theme() -> Theme {
     }
 }
 
-pub fn no_comment() -> Comment {
-    Comment {
+pub fn no_comment() -> CommentReturn {
+    CommentReturn {
         id: 0,
         theme_id: 0,
         user_id: 0,
         content: "".to_owned(),
         created_at: Utc::now().naive_utc(),
+        username: "".to_owned(),
+        rtime: "".to_owned(),
+    }
+}
+
+pub fn themelist() -> ThemeListResult {
+    ThemeListResult {
+        id: 0,
+        user_id: 0,
+        category: "".to_string(),
+        status: 0,
+        title: "".to_string(),
+        content: "".to_string(),
+        view_count: 0,
+        comment_count: 0,
+        created_at: Utc::now().naive_utc(),
+        username: "".to_string(),
+        rtime: "".to_string(),
+    }
+}
+
+pub fn commen_return() -> CommentReturn {
+    CommentReturn {
+        id: 0,
+        theme_id: 0,
+        user_id: 0,
+        content: "".to_string(),
+        created_at: Utc::now().naive_utc(),
+        username: "".to_string(),
+        rtime: "".to_string(),
     }
 }

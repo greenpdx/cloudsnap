@@ -4,21 +4,21 @@
         <div id="body">
             <div id="theme">
                 <div id="title">
-                    <h3> {{ theme.title }} </h3> 
+                    <h2> {{ theme.title }} </h2> 
                     <span id="info"> {{ theme.category }}</span> • 
                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme_user.username }}</a></span> •   
-                    <span id="info">{{ theme.created_at }}</span>  
+                    <span id="info">{{ theme_rtime }}</span>  
                 </div>
                 <div id="content" v-html="theme.content" ></div>
             </div>
             <hr>
             <div id="comment">
-                <div id="count">Comment &nbsp; {{ theme.comment_count }} </div>
+                <div id="count" style="font-weight: bold; color: #b93bf3;">Comment &nbsp; {{ theme.comment_count }} </div>
                 <div v-for="(comment, index) in theme_comment" :key="index">
                     <div id="detail">
                         <div id="infos">
-                            <span id="info" style="font-weight: bold; color: #D10303;">{{ index + 1 }} </span>
-                            <span id="info"><a :href="'/a/user/' + comment.user_id">{{ comment.user_id }}</a></span> • <span id="info">{{ comment.created_at }}</span>
+                            <span id="info" >{{ index + 1 }} </span>
+                            <span id="info"><a :href="'/a/user/' + comment.user_id">{{ comment.username }}</a></span> • <span id="info">{{ comment.rtime }}</span>
                         </div>
                         <div id="content" v-html="comment.content" > </div>
                     </div>
@@ -52,6 +52,7 @@ export default {
             theme: '',
             theme_user: '',
             theme_comment: '',
+            theme_rtime: '',
             signin_user: ''
         }
     },
@@ -64,6 +65,7 @@ export default {
             this.theme = response.data.theme
             this.theme_user = response.data.theme_user
             this.theme_comment = response.data.theme_comment
+            this.theme_rtime = response.data.theme_rtime
             console.log(response.data.theme)
             console.log(response.data.theme_user)
         })
@@ -85,7 +87,7 @@ export default {
         console.log(response.data.message)
         window.location.reload ( true )
       })
-      .catch((e) => {
+      .catch((e) => {theme_comment
         console.log(e)
       })
     }
@@ -105,7 +107,7 @@ a {
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #theme > #title h3 { 
+#body #theme > #title h2 { 
     padding-bottom: 0.3rem;
 }
 #body #theme > #title #info {
