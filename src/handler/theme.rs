@@ -18,7 +18,7 @@ impl Handler<ThemeList> for ConnDsl {
         use utils::schema::theme::dsl::*;
         use utils::schema::users;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let mut themes = theme.load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+        let mut themes = theme.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
         let mut themes_list: Vec<ThemeListResult> = vec![];
         for theme_one in themes {
             let mut themes_list_one = themelist();
