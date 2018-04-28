@@ -57,6 +57,8 @@ then open broswer 'http://localhost:8000/'
 
 <img alt="publish" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/publish.png">
 
+<img alt="user" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/user.png">
+
 <img alt="auth" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/auth.png">
 
 
