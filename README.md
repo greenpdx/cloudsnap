@@ -1,6 +1,6 @@
 # muro [![Build Status](https://travis-ci.org/OUIRC/muro.svg?branch=master)](https://travis-ci.org/OUIRC/muro)
 
-The muro library for modern community.
+The interest and community for internet .
 >this is muro-v2. the muro-v1 is [here](https://github.com/something-here/muro)
 
 muro is single page webapp written in [actix-web](https://github.com/actix/actix-web) with vuejs.
