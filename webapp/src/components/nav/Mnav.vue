@@ -7,7 +7,7 @@
       </header>
       <div id="lnav">
           <li> <router-link to="/a/wiki" title="wiki">wiki</router-link></li>
-          <li> <router-link to="/a/more" title="more">more</router-link></li>
+          <li> <router-link to="/a/explore" title="explore">explore</router-link></li>
       </div>
       <div id="rnav">
           <li v-if="username"> 
@@ -19,7 +19,7 @@
           <li v-else > 
             <router-link to="/a/access" title="access">access</router-link>
           </li>
-          <li> <router-link to="/a/about" title="about">about</router-link></li>
+          <li> <router-link to="/a/more" title="more">more</router-link></li>
       </div> 
   </div>
 </template>

@@ -99,8 +99,6 @@ impl Handler<ThemeList> for ConnDsl {
     }
 }
 
-
-
 impl Handler<ThemeId> for ConnDsl {
     type Result = Result<ThemeAndCommentsMsgs, Error>;
     fn handle(&mut self, theme_one: ThemeId, _: &mut Self::Context) -> Self::Result {
@@ -213,68 +211,3 @@ impl Handler<ThemeComment> for ConnDsl {
     }
 }
 
-// impl Handler<ThemeList> for ConnDsl {
-//     type Result = Result<ThemeListMsgs, Error>;
-
-//     fn handle(&mut self, theme_list: ThemeList, _: &mut Self::Context) -> Self::Result {
-//         use utils::schema::themes::dsl::*;
-//         use utils::schema::users;
-//         use utils::schema::communitys;
-//         use utils::schema::joins;
-//         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-//         let mut themes_list_user_id: Vec<ThemeListResult> = vec![];
-//         let community_ids = joins::table.filter(joins::user_id.eq(theme_list.user_id)).load::<Join>(conn).map_err(error::ErrorInternalServerError)?;
-//         let mut themes_result_user_id_community: Vec<Theme> = vec![];
-//         for community_id_one in community_ids {
-//              let theme_community_id = themes.filter(community_id.eq(community_id_one)).order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-//              themes_list_user_id.push(theme_community_id);
-//         }
-//         let mut themes_result = themes.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-//         let mut themes_list: Vec<ThemeListResult> = vec![];
-//         if theme_list.user_id == "" {
-//             Ok(ThemeListMsgs { 
-//                 status: 200,
-//                 message : "theme_list result.".to_string(),
-//                 theme_list: themes_list.theme_list_result(),
-//             })
-//         }else{
-//             Ok(ThemeListMsgs { 
-//                 status: 200,
-//                 message : "theme_list result.".to_string(),
-//                 theme_list: themes_list_user_id.theme_list_result(),
-//             })
-//         }
-//     }
-// }
-
-// fn theme_list_result(condsl: &mut ConnDsl,themes_input: Vec<Theme>, theme_list_input: Vec<ThemeListResult>) -> Vec<ThemeListResult> {
-//             use utils::schema::themes::dsl::*;
-//             use utils::schema::users;
-//             use utils::schema::communitys;
-//             let conn = &condsl.0.get().map_err(error::ErrorInternalServerError)?;
-//             for theme_one in themes_input {
-//                 let mut themes_list_one = ThemeListResult::new();
-//                 themes_list_one.id = theme_one.id;
-//                 themes_list_one.user_id = theme_one.user_id;
-//                 themes_list_one.community_id = theme_one.community_id;
-//                 themes_list_one.theme_status = theme_one.theme_status;
-//                 themes_list_one.title = theme_one.title;
-//                 themes_list_one.content = theme_one.content;
-//                 themes_list_one.view_count = theme_one.view_count;
-//                 themes_list_one.comment_count = theme_one.comment_count;
-//                 themes_list_one.created_at = theme_one.created_at;
-//                 let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
-//                 themes_list_one.rtime = rtime;
-//                 let community_result =  communitys::table.filter(communitys::id.eq(theme_one.community_id)).load::<Community>(conn).map_err(error::ErrorInternalServerError)?.pop();
-//                 match community_result {
-//                     Some(community_one) => { themes_list_one.community_name = community_one.community_name; },
-//                     None => { println!("No community result");},
-//                 }
-//                 let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
-//                 match theme_user {
-//                     Some(user) => { themes_list_one.username = user.username;},
-//                     None => { println!("No theme_user result");},
-//                 }
-//                 theme_list_input.push(themes_list_one);
-//             }
-// }
