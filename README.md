@@ -53,11 +53,13 @@ then open broswer 'http://localhost:8000/'
 
 <img alt="Home" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/home.png">
 
-<img alt="theme" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/theme.png">
+<img alt="explore" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/explore.png">
 
 <img alt="community" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/community.png">
 
-<img alt="publish" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/publish.png">
+<img alt="theme" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/theme.png">
+
+<img alt="post" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/post.png">
 
 <img alt="user" width="900" src="https://raw.githubusercontent.com/OUISRC/muro/master/user.png">
 
