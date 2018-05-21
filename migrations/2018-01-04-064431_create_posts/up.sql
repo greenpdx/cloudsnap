@@ -43,21 +43,32 @@ CREATE TABLE  communitys (
   id SERIAL NOT NULL PRIMARY KEY,
   create_user_id INTEGER NOT NULL,
   community_name TEXT NOT NULL,
+  community_category TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (community_name)
 );
 
- INSERT INTO communitys (id, create_user_id, community_name, created_at) VALUES
-  (1, 1, 'Rust', '2017-09-08 13:00:26.353041'),
-  (2, 2, 'Dart', '2017-09-08 13:00:28.353041'),
-  (3, 3, 'C++', '2017-09-08 13:00:38.353041'),
-  (4, 1, 'Go', '2017-09-08 13:00:26.353041'),
-  (5, 2, 'Swift', '2017-09-08 13:00:28.353041'),
-  (6, 3, 'JS', '2017-09-08 13:00:38.353041'),
-  (7, 1, 'Python', '2017-09-08 13:00:26.353041'),
-  (8, 2, 'Java', '2017-09-08 13:00:28.353041'),
-  (9, 3, 'Ruby', '2017-09-08 13:00:38.353041');
- SELECT setval('communitys_id_seq', 9, true);
+ INSERT INTO communitys (id, create_user_id, community_name, community_category, created_at) VALUES
+  (1, 1, 'Rust', 'programming', '2017-09-08 13:00:26.353041'),
+  (2, 2, 'Dart', 'programming', '2017-09-08 13:00:28.353041'),
+  (3, 3, 'C++', 'programming', '2017-09-08 13:00:38.353041'),
+  (4, 1, 'Go', 'programming', '2017-09-08 13:00:26.353041'),
+  (5, 2, 'Swift', 'programming', '2017-09-08 13:00:28.353041'),
+  (6, 3, 'JS', 'programming', '2017-09-08 13:00:38.353041'),
+  (7, 1, 'Python', 'programming', '2017-09-08 13:00:26.353041'),
+  (8, 2, 'Java', 'programming', '2017-09-08 13:00:28.353041'),
+  (9, 3, 'Ruby', 'programming', '2017-09-08 13:00:38.353041'),
+  (10, 1, 'Apple', 'fruit', '2017-09-08 13:00:26.353041'),
+  (11, 1, 'Pear', 'fruit', '2017-09-08 13:00:26.353041'),
+  (12, 2, 'Lemon', 'fruit', '2017-09-08 13:00:28.353041'),
+  (13, 3, 'Grape', 'fruit', '2017-09-08 13:00:38.353041'),
+  (14, 1, 'Mango', 'fruit', '2017-09-08 13:00:26.353041'),
+  (15, 2, 'Cherry', 'fruit', '2017-09-08 13:00:28.353041'),
+  (16, 3, 'Dates', 'fruit', '2017-09-08 13:00:38.353041'),
+  (17, 1, 'Coconut', 'fruit', '2017-09-08 13:00:26.353041'),
+  (18, 2, 'Durin', 'fruit', '2017-09-08 13:00:28.353041'),
+  (19, 3, 'Loquat', 'fruit', '2017-09-08 13:00:38.353041');
+ SELECT setval('communitys_id_seq', 19, true);
 
 
  CREATE TABLE  comments (

@@ -2,13 +2,14 @@ use actix::*;
 use actix_web::*;
 use utils::schema::communitys;
 use chrono::{Utc, NaiveDateTime};
-use model::response::{CommunityNamesMsgs, Msgs, CommunityThemesMsgs};
+use model::response::{CommunityNamesMsgs, CommunityCategorysMsgs, Msgs, CommunityThemesMsgs};
 
 #[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable)]
 pub struct Community {
     pub id: i32,
     pub create_user_id: i32,
     pub community_name: String,
+    pub community_category: String,
     pub created_at: NaiveDateTime,
 }
 
@@ -17,6 +18,7 @@ pub struct Community {
 pub struct NewCommunity<'a> {
     pub create_user_id: i32,
     pub community_name: &'a str,
+    pub community_category: &'a str,
     pub created_at: NaiveDateTime,
 }
 
@@ -24,11 +26,15 @@ pub struct NewCommunity<'a> {
 pub struct CommunityNew {
     pub create_user_id: i32,
     pub community_name: String,
+    pub community_category: String,
 }
 #[derive(Deserialize,Serialize, Debug, Clone)]
 pub struct CommunityNames {
     pub create_user_id: i32,
 }
+
+#[derive(Deserialize,Serialize, Debug, Clone)]
+pub struct CommunityCategorys;
 
 #[derive(Deserialize,Serialize, Debug, Clone)]
 pub struct CommunityThemes {
@@ -66,6 +72,10 @@ impl Message for CommunityNew {
 
 impl Message for CommunityNames {
     type Result = Result<CommunityNamesMsgs, Error>;
+}
+
+impl Message for CommunityCategorys {
+    type Result = Result<CommunityCategorysMsgs, Error>;
 }
 
 impl Message for CommunityLike {

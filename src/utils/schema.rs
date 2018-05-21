@@ -25,6 +25,7 @@ table! {
         id -> Int4,
         create_user_id -> Int4,
         community_name -> Text,
+        community_category -> Text,
         created_at -> Timestamp,
     }
 }

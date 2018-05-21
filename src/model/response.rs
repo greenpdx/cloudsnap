@@ -52,6 +52,13 @@ pub struct CommunityNamesMsgs {
 }
 
 #[derive(Deserialize,Serialize, Debug)]
+pub struct CommunityCategorysMsgs {
+    pub status: i32,
+    pub message : String,
+    pub community_categorys : Vec<String>,
+}
+
+#[derive(Deserialize,Serialize, Debug)]
 pub struct CommunityThemesMsgs {
     pub status: i32,
     pub message : String,

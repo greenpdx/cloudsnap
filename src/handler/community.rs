@@ -3,13 +3,14 @@ use diesel::prelude::*;
 use actix::*;
 use actix_web::*;
 use chrono::Utc;
-use model::response::{CommunityNamesMsgs, Msgs, CommunityThemesMsgs};
+use std::collections::HashSet;
+use model::response::{CommunityNamesMsgs, CommunityCategorysMsgs, Msgs, CommunityThemesMsgs};
 use model::db::ConnDsl;
 use model::theme::Theme;
 use model::user::User;
 use model::join::NewJoin;
 use utils::time;
-use model::community::{Community, NewCommunity, CommunityLike, CommunityNew, CommunityNames, CommunityThemes, CommunityThemeListResult};
+use model::community::{Community, NewCommunity, CommunityLike, CommunityNew, CommunityNames, CommunityCategorys, CommunityThemes, CommunityThemeListResult};
 
 
 impl Handler<CommunityNew> for ConnDsl {
@@ -21,6 +22,7 @@ impl Handler<CommunityNew> for ConnDsl {
         let new_community = NewCommunity {
             create_user_id: community_new.create_user_id,
             community_name: &community_new.community_name,
+            community_category: &community_new.community_category,
             created_at: Utc::now().naive_utc(),
         };
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
@@ -47,6 +49,26 @@ impl Handler<CommunityNames> for ConnDsl {
                 status: 200,
                 message : "TypeNamesMsgs.".to_string(),
                 community_names: name_list,
+        })        
+    }
+}
+
+impl Handler<CommunityCategorys> for ConnDsl {
+    type Result = Result<CommunityCategorysMsgs, Error>;
+
+    fn handle(&mut self, community_categorys: CommunityCategorys, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::communitys::dsl::*;
+        let mut categorys_list: Vec<String> = vec![];
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let community_list = communitys.load::<Community>(conn).map_err(error::ErrorInternalServerError)?;
+        for community_one in community_list {
+            categorys_list.push(community_one.community_category);
+        }
+        let categorys_result = categorys_list.into_iter().collect::<HashSet<_>>().into_iter().collect::<Vec<_>>();
+        Ok(CommunityCategorysMsgs { 
+                status: 200,
+                message : "TypeNamesMsgs.".to_string(),
+                community_categorys: categorys_result,
         })        
     }
 }
