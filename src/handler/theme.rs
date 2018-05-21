@@ -4,129 +4,158 @@ use actix::*;
 use actix_web::*;
 use timeago;
 use chrono::{Utc, Datelike, Timelike, NaiveDateTime};
-use model::response::{ThemeListMsgs, ThemeAndCommentMsgs, Msgs};
-use model::theme::{themelist, Theme, ThemeList, ThemeListResult, ThemeId, NewTheme, 
-                   ThemeNew, Comment, CommentReturn, NewComment, ThemeComment, commen_return, no_theme, no_comment};
+use model::response::{ThemeListMsgs, Msgs, ThemeAndCommentsMsgs};
+use model::theme::{Theme, ThemeList, ThemeListResult, ThemeId, NewTheme, ThemeNew, Comment, CommentReturn, NewComment, ThemeComment};
+use model::community::Community;
 use model::db::ConnDsl;
-use model::user::{User, no_user};
+use model::user::User;
+use model::join::Join;
 use utils::{time, markdown_to_html};
 
 impl Handler<ThemeList> for ConnDsl {
     type Result = Result<ThemeListMsgs, Error>;
 
     fn handle(&mut self, theme_list: ThemeList, _: &mut Self::Context) -> Self::Result {
-        use utils::schema::theme::dsl::*;
+        use utils::schema::themes::dsl::*;
         use utils::schema::users;
+        use utils::schema::communitys;
+        use utils::schema::joins;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let mut themes = theme.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-        let mut themes_list: Vec<ThemeListResult> = vec![];
-        for theme_one in themes {
-            let mut themes_list_one = themelist();
-            themes_list_one.id = theme_one.id;
-            themes_list_one.user_id = theme_one.user_id;
-            themes_list_one.category = theme_one.category;
-            themes_list_one.status = theme_one.status;
-            themes_list_one.title = theme_one.title;
-            themes_list_one.content = theme_one.content;
-            themes_list_one.view_count = theme_one.view_count;
-            themes_list_one.comment_count = theme_one.comment_count;
-            themes_list_one.created_at = theme_one.created_at;
-            let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
-            themes_list_one.rtime = rtime;
-            let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
-            match theme_user {
-                Some(user) => {
-                        themes_list_one.username = user.username;
-                },
-                None => {
-                        themes_list_one.username = "".to_string();
-                },
+        if theme_list.user_id == 0 {
+            let mut themes_result = themes.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+            let mut themes_list: Vec<ThemeListResult> = vec![];
+            for theme_one in themes_result {
+                let mut themes_list_one = ThemeListResult::new();
+                themes_list_one.id = theme_one.id;
+                themes_list_one.user_id = theme_one.user_id;
+                themes_list_one.community_id = theme_one.community_id;
+                themes_list_one.theme_status = theme_one.theme_status;
+                themes_list_one.title = theme_one.title;
+                themes_list_one.content = theme_one.content;
+                themes_list_one.view_count = theme_one.view_count;
+                themes_list_one.comment_count = theme_one.comment_count;
+                themes_list_one.created_at = theme_one.created_at;
+                let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
+                themes_list_one.rtime = rtime;
+                let community_result =  communitys::table.filter(communitys::id.eq(theme_one.community_id)).load::<Community>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match community_result {
+                    Some(community_one) => { themes_list_one.community_name = community_one.community_name; },
+                    None => { println!("No community result");},
+                }
+                let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match theme_user {
+                    Some(user) => { themes_list_one.username = user.username;},
+                    None => { println!("No theme_user result");},
+                }
+                themes_list.push(themes_list_one);
             }
-            {
-                themes_list.push(themes_list_one)
-            }
+            Ok(ThemeListMsgs { 
+                status: 200,
+                message : "theme_list result.".to_string(),
+                theme_list: themes_list,
+            })
         }
-        Ok(ThemeListMsgs { 
-            status: 200,
-            message : "theme_list result.".to_string(),
-            theme_list: themes_list,
-        })
+        else{
+            let join_community_ids = joins::table.filter(joins::user_id.eq(theme_list.user_id)).load::<Join>(conn).map_err(error::ErrorInternalServerError)?;
+            let mut themes_result_user_id: Vec<Theme> = vec![];
+            for join_community_id_one in join_community_ids {
+                let theme_community_id = themes.filter(community_id.eq(join_community_id_one.community_id)).order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+                for theme_community_id_one in  theme_community_id {
+                    themes_result_user_id.push(theme_community_id_one);
+                }
+            }
+            let mut themes_list_user_id: Vec<ThemeListResult> = vec![];
+            for theme_one in themes_result_user_id {
+                let mut themes_list_one = ThemeListResult::new();
+                themes_list_one.id = theme_one.id;
+                themes_list_one.user_id = theme_one.user_id;
+                themes_list_one.community_id = theme_one.community_id;
+                themes_list_one.theme_status = theme_one.theme_status;
+                themes_list_one.title = theme_one.title;
+                themes_list_one.content = theme_one.content;
+                themes_list_one.view_count = theme_one.view_count;
+                themes_list_one.comment_count = theme_one.comment_count;
+                themes_list_one.created_at = theme_one.created_at;
+                let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
+                themes_list_one.rtime = rtime;
+                let community_result =  communitys::table.filter(communitys::id.eq(theme_one.community_id)).load::<Community>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match community_result {
+                    Some(community_one) => { themes_list_one.community_name = community_one.community_name; },
+                    None => { println!("No community result");},
+                }
+                let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match theme_user {
+                    Some(user) => { themes_list_one.username = user.username;},
+                    None => { println!("No theme_user result");},
+                }
+                themes_list_user_id.push(themes_list_one);
+            }
+            Ok(ThemeListMsgs { 
+                status: 200,
+                message : "theme_list result.".to_string(),
+                theme_list: themes_list_user_id,
+            })
+        }
     }
 }
 
-impl Handler<ThemeId> for ConnDsl {
-    type Result = Result<ThemeAndCommentMsgs, Error>;
 
-    fn handle(&mut self, theme_id: ThemeId, _: &mut Self::Context) -> Self::Result {
-        use utils::schema::theme::dsl::*;
+
+impl Handler<ThemeId> for ConnDsl {
+    type Result = Result<ThemeAndCommentsMsgs, Error>;
+    fn handle(&mut self, theme_one: ThemeId, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::themes::dsl::*;
         use utils::schema::users;
-        use utils::schema::comment;
+        use utils::schema::communitys;
+        use utils::schema::comments;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        diesel::update(theme).filter(&id.eq(&theme_id.theme_id)).set((view_count.eq(view_count + 1),)).execute(conn).map_err(error::ErrorInternalServerError)?;
-        let the_theme =  theme.filter(&id.eq(&theme_id.theme_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?.pop();
-        let mut theme_comment = comment::table.filter(&comment::theme_id.eq(&theme_id.theme_id)).load::<Comment>(conn).map_err(error::ErrorInternalServerError)?;
-        let mut comment_list: Vec<CommentReturn> = vec![];
-        for comment in &mut theme_comment {
-            let mut comment_list_one = commen_return();
-            comment_list_one.id = comment.id;
-            comment_list_one.theme_id = comment.theme_id;
-            comment_list_one.user_id = comment.user_id;
-            comment_list_one.content = markdown_to_html(&comment.content);
-            comment_list_one.created_at = comment.created_at;
-            let comment_user = users::table.filter(&users::id.eq(comment.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
-            match comment_user {
-                    Some(someuser) => {  comment_list_one.username = someuser.username; },
-                    None => { comment_list_one.username = "".to_string(); },
-            }
-            let rtime = time(Utc::now().naive_utc(), comment.created_at);
-            comment_list_one.rtime = rtime;
-            comment_list.push(comment_list_one);
-        }
-        let no_theme = no_theme();
-        let no_user = no_user();
-        let no_comment = no_comment();
-        let no_comments = vec![];
+        diesel::update(themes).filter(&id.eq(&theme_one.theme_id)).set((view_count.eq(view_count + 1),)).execute(conn).map_err(error::ErrorInternalServerError)?;
+        let the_theme =  themes.filter(&id.eq(&theme_one.theme_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?.pop();
+        let mut theme_and_comments = ThemeAndCommentsMsgs::new();
         match the_theme {
             Some(mut themeid) => {
-                let theme_rtime = time(Utc::now().naive_utc(), themeid.created_at);
                 themeid.content = markdown_to_html(&themeid.content);
-                let uid = themeid.user_id;
-                let user_result = users::table.filter(&users::id.eq(uid)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
-                match user_result {
-                    Some(themeid_user) => {
-                        Ok(ThemeAndCommentMsgs { 
-                            status: 200,
-                            message : "The  theme info.".to_string(),
-                            theme: themeid,
-                            theme_user: themeid_user,
-                            theme_comment: comment_list,
-                            theme_rtime : theme_rtime,
-                        })
-                    },
-                    None => {
-                        Ok(ThemeAndCommentMsgs { 
-                            status: 400,
-                            message : "error.".to_string(),
-                            theme: no_theme,
-                            theme_user: no_user,
-                            theme_comment: no_comments,
-                            theme_rtime : "".to_string(),
-                        })
-                    },
+                theme_and_comments.theme = themeid.clone();
+                let mut theme_comment = comments::table.filter(&comments::theme_id.eq(&themeid.id)).load::<Comment>(conn).map_err(error::ErrorInternalServerError)?;
+                for comment in &mut theme_comment {
+                    let mut comment_list_one = CommentReturn::new();
+                    comment_list_one.id = comment.id;
+                    comment_list_one.theme_id = comment.theme_id;
+                    comment_list_one.user_id = comment.user_id;
+                    comment_list_one.content = markdown_to_html(&comment.content);
+                    comment_list_one.created_at = comment.created_at;
+                    let comment_user = users::table.filter(&users::id.eq(comment.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                    match comment_user {
+                            Some(someuser) => {  
+                            comment_list_one.username = someuser.username; },
+                            None => { println!("No comment_user"); },
+                    }
+                    comment_list_one.rtime = time(Utc::now().naive_utc(), comment.created_at);
+                    theme_and_comments.theme_comments.push(comment_list_one);
                 }
-                    
+                let community_result =  communitys::table.filter(&communitys::id.eq(&themeid.community_id)).load::<Community>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match community_result {
+                    Some(community_one) => {
+                        theme_and_comments.theme_community_name = community_one.community_name;},
+                    None => { println!("No theme_community"); },
+                }
+                theme_and_comments.theme_rtime = time(Utc::now().naive_utc(), themeid.created_at);
+                let user_result = users::table.filter(&users::id.eq(&themeid.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                match user_result {
+                    Some(themeid_user) => { 
+                        theme_and_comments.theme_user = themeid_user; },
+                    None => { println!("No theme_user"); },
+                }
             },
-            None => {
-                    Ok(ThemeAndCommentMsgs { 
-                        status: 400,
-                        message : "error.".to_string(),
-                        theme: no_theme,
-                        theme_user: no_user,
-                        theme_comment: no_comments,
-                        theme_rtime : "".to_string(),
-                    })
-            },
+            None => { println!("No theme"); },
         }
+        Ok(ThemeAndCommentsMsgs{
+            theme: theme_and_comments.theme,
+            theme_user: theme_and_comments.theme_user,
+            theme_community_name: theme_and_comments.theme_community_name,
+            theme_rtime: theme_and_comments.theme_rtime,
+            theme_comments: theme_and_comments.theme_comments,
+        })
     }
 }
 
@@ -134,20 +163,26 @@ impl Handler<ThemeNew> for ConnDsl {
     type Result = Result<Msgs, Error>;
 
     fn handle(&mut self, theme_new: ThemeNew, _: &mut Self::Context) -> Self::Result {
-        use utils::schema::theme::dsl::*;
-
+        use utils::schema::themes::dsl::*;
+        use utils::schema::communitys;
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let community_one =  communitys::table.filter(communitys::community_name.eq(theme_new.community_name)).load::<Community>(conn).map_err(error::ErrorInternalServerError)?.pop();
+        let cid: i32 ;
+        match community_one {
+            Some(one) => { cid = one.id;},
+            None => { cid = 0;},
+        }    
         let new_theme = NewTheme {
             user_id: theme_new.user_id,
-            category: &theme_new.category,
+            community_id: cid,
             title: &theme_new.title,
             content: &theme_new.content,
             created_at: Utc::now().naive_utc(),
         };
-        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        diesel::insert_into(theme).values(&new_theme).execute(conn).map_err(error::ErrorInternalServerError)?;
+        diesel::insert_into(themes).values(&new_theme).execute(conn).map_err(error::ErrorInternalServerError)?;
         Ok(Msgs { 
-                    status: 200,
-                    message : "Theme Publish Successful.".to_string(),
+                status: 200,
+                message : "Theme Post Successful.".to_string(),
         })        
     }
 }
@@ -156,8 +191,8 @@ impl Handler<ThemeComment> for ConnDsl {
     type Result = Result<Msgs, Error>;
 
     fn handle(&mut self, theme_comment: ThemeComment, _: &mut Self::Context) -> Self::Result {
-        use utils::schema::comment::dsl::*;
-        use utils::schema::theme;
+        use utils::schema::comments::dsl::*;
+        use utils::schema::themes;
         let the_theme_id: i32 = theme_comment.the_theme_id.to_owned().parse().map_err(error::ErrorBadRequest)?;
         let new_comment = NewComment {
             theme_id: the_theme_id,
@@ -166,15 +201,80 @@ impl Handler<ThemeComment> for ConnDsl {
             created_at: Utc::now().naive_utc(),
         };
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        diesel::insert_into(comment).values(&new_comment).execute(conn).map_err(error::ErrorInternalServerError)?;
-        diesel::update(theme::table)
-            .filter(&theme::id.eq(&the_theme_id))
-            .set((
-                theme::comment_count.eq(theme::comment_count + 1),
-            )).execute(conn).map_err(error::ErrorInternalServerError)?;
+        diesel::insert_into(comments).values(&new_comment).execute(conn).map_err(error::ErrorInternalServerError)?;
+        diesel::update(themes::table)
+            .filter(&themes::id.eq(&the_theme_id))
+            .set((themes::comment_count.eq(themes::comment_count + 1),))
+            .execute(conn).map_err(error::ErrorInternalServerError)?;
         Ok(Msgs { 
-                    status: 200,
-                    message : "Comment Add Successful.".to_string(),
+                status: 200,
+                message : "Comment Add Successful.".to_string(),
         })        
     }
 }
+
+// impl Handler<ThemeList> for ConnDsl {
+//     type Result = Result<ThemeListMsgs, Error>;
+
+//     fn handle(&mut self, theme_list: ThemeList, _: &mut Self::Context) -> Self::Result {
+//         use utils::schema::themes::dsl::*;
+//         use utils::schema::users;
+//         use utils::schema::communitys;
+//         use utils::schema::joins;
+//         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+//         let mut themes_list_user_id: Vec<ThemeListResult> = vec![];
+//         let community_ids = joins::table.filter(joins::user_id.eq(theme_list.user_id)).load::<Join>(conn).map_err(error::ErrorInternalServerError)?;
+//         let mut themes_result_user_id_community: Vec<Theme> = vec![];
+//         for community_id_one in community_ids {
+//              let theme_community_id = themes.filter(community_id.eq(community_id_one)).order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+//              themes_list_user_id.push(theme_community_id);
+//         }
+//         let mut themes_result = themes.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+//         let mut themes_list: Vec<ThemeListResult> = vec![];
+//         if theme_list.user_id == "" {
+//             Ok(ThemeListMsgs { 
+//                 status: 200,
+//                 message : "theme_list result.".to_string(),
+//                 theme_list: themes_list.theme_list_result(),
+//             })
+//         }else{
+//             Ok(ThemeListMsgs { 
+//                 status: 200,
+//                 message : "theme_list result.".to_string(),
+//                 theme_list: themes_list_user_id.theme_list_result(),
+//             })
+//         }
+//     }
+// }
+
+// fn theme_list_result(condsl: &mut ConnDsl,themes_input: Vec<Theme>, theme_list_input: Vec<ThemeListResult>) -> Vec<ThemeListResult> {
+//             use utils::schema::themes::dsl::*;
+//             use utils::schema::users;
+//             use utils::schema::communitys;
+//             let conn = &condsl.0.get().map_err(error::ErrorInternalServerError)?;
+//             for theme_one in themes_input {
+//                 let mut themes_list_one = ThemeListResult::new();
+//                 themes_list_one.id = theme_one.id;
+//                 themes_list_one.user_id = theme_one.user_id;
+//                 themes_list_one.community_id = theme_one.community_id;
+//                 themes_list_one.theme_status = theme_one.theme_status;
+//                 themes_list_one.title = theme_one.title;
+//                 themes_list_one.content = theme_one.content;
+//                 themes_list_one.view_count = theme_one.view_count;
+//                 themes_list_one.comment_count = theme_one.comment_count;
+//                 themes_list_one.created_at = theme_one.created_at;
+//                 let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
+//                 themes_list_one.rtime = rtime;
+//                 let community_result =  communitys::table.filter(communitys::id.eq(theme_one.community_id)).load::<Community>(conn).map_err(error::ErrorInternalServerError)?.pop();
+//                 match community_result {
+//                     Some(community_one) => { themes_list_one.community_name = community_one.community_name; },
+//                     None => { println!("No community result");},
+//                 }
+//                 let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+//                 match theme_user {
+//                     Some(user) => { themes_list_one.username = user.username;},
+//                     None => { println!("No theme_user result");},
+//                 }
+//                 theme_list_input.push(themes_list_one);
+//             }
+// }

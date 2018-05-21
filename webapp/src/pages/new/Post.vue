@@ -1,35 +1,23 @@
 <template>
-    <div id="new">
+    <div id="post">
         <mnav id="mnav"></mnav>
         <div id="content">
             <div id="new-title"><p>New Theme</p></div>
             <form id="form" >
                     <div id="topic-group">
                         <span  id="category">
-                                <select v-if="username" name="category" v-model="Category" id="category-control" >
-                                    <option value="Topic">Topic <span class="icon-arrow"></span></option>
-                                    <option value="Announce">Announce</option>
-                                    <option value="Share">Share</option>
-                                    <option value="Blog">Blog</option>
-                                    <option value="Help">Help</option>
-                                    <option value="Job">Job</option>
-                                    <option value="Office">Office</option>
-
-                                    <option style="color: #1EB332;" disabled="disabled" >--wiki--</option>
-                                    <option value="Docs">Docs</option>
-                                    <option value="Resources">Resources</option>
-                                    <option value="Web">Web</option>
-                                    <option value="Embed">Embed</option>
-                                    <option value="Server">Server</option>
-                                    <option value="Client">Wasm</option>
+                                <select v-if="username" name="community_name" v-model="CommunityName" id="category-control" >
+                                    <option value="muro">muro<span class="icon-arrow"></span></option>
+                                    <option value="office">Office</option>
+                                    <option v-bind:value="community_name" v-for="(community_name, index) in community_names" :key="index">
+                                            {{community_name}}
+                                    </option>
                                 </select>
-                                <select v-else name="category" v-model="Category" id="category-control">
-                                    <option value="Announce">Announce</option>
-                                    <option value="Topic">Topic</option>
-                                    <option value="Share">Share</option>
-                                    <option value="Blog">Blog</option>
-                                    <option value="Help">Help</option>
-                                    <option value="Job">Job</option>
+                                <select v-else name="community_name" v-model="CommunityName" id="category-control">
+                                    <option value="muro">muro<span class="icon-arrow"></span></option>
+                                    <option v-bind:value="community_name" v-for="(community_name, index) in community_names" :key="index">
+                                            {{community_name}}
+                                    </option>
                                 </select>
                         </span>
                         <span id="title">
@@ -40,7 +28,7 @@
                                 <textarea name="content" v-model="Content" placeholder="Write new content in markdown!"></textarea>
                     </div>
                     <div id="new">
-                                <button type="submit" id="submit" @click="publish" ><span class="tip"> Publish </span></button>
+                                <button type="submit" id="submit" @click="post" ><span class="tip"> Post </span></button>
                     </div>
             </form>
         </div>
@@ -51,33 +39,46 @@
 import axios from 'axios'
 import Mnav from '../../components/nav/Mnav'
 export default {
-    name: 'new',
+    name: 'post',
     components: {
         "mnav": Mnav
     },
     data () {
         return {
-            Category: '',
+            community_names: '',
+            CommunityName: '',
             Title: '',
             Content: ''
         }
     },
+    mounted: function() {
+        var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+        axios.post('http://localhost:8001/api/community_names',{
+            create_user_id: user_id
+        })
+        .then((response) => {
+            this.community_names = response.data.community_names
+            console.log(response.data.community_names)
+        })
+        .catch((e) => {
+            console.log(e)
+        })
+    },
     methods: {
-        publish () {
-            var category = this.Category
+        post() {
+            var community_name = this.CommunityName
             var title = this.Title
             var content = this.Content
             var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-            axios.post('http://localhost:8000/api/theme_new', {
+            axios.post('http://localhost:8001/api/theme_new', {
                 user_id: user_id,
-                category: category,
+                community_name: community_name,
                 title: title,
                 content: content
             })
             .then(response => {
-                // console.log(response.data.msg)
                 window.location.reload ( true )
-                this.$router.push('/')
+                this.$router.push('/a/community/community_name')
             })
             .catch(e => {
                 console.log(e)

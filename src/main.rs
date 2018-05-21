@@ -33,6 +33,7 @@ use model::db::ConnDsl;
 use api::index::{AppState, home, path};
 use api::auth::{signup, signin};
 use api::theme::{theme_and_comments,theme_list, theme_new, theme_add_comment};
+use api::community::{community_new, community_names, community_theme_list, community_like};
 use api::user::{user_info, user_delete, user_update};
 
 fn main() {
@@ -50,7 +51,6 @@ fn main() {
             .resource("/", |r| r.h(home))
             .resource("/a/{tail:.*}", |r| r.h(path))
             .configure(|app| Cors::for_app(app)
-            // .allowed_origin("http://localhost:1234")    // let CORS default to all
             .allowed_methods(vec!["GET", "POST"])
             .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
             .allowed_header(header::CONTENT_TYPE)
@@ -60,15 +60,19 @@ fn main() {
             .resource("/api/user_info", |r| { r.method(Method::GET).h(user_info); })
             .resource("/api/user_delete", |r| { r.method(Method::GET).h(user_delete); })
             .resource("/api/user_update", |r| { r.method(Method::POST).with2(user_update); })
-            .resource("/api/theme_list", |r| { r.method(Method::GET).h(theme_list); })
+            .resource("/api/theme_list", |r| { r.method(Method::POST).with2(theme_list); })
+            .resource("/api/community/{community_name}", |r| { r.method(Method::GET).h(community_theme_list); })
             .resource("/api/theme_new", |r| { r.method(Method::POST).with2(theme_new); })
+            .resource("/api/community_new", |r| { r.method(Method::POST).with2(community_new); })
+            .resource("/api/community_names", |r| { r.method(Method::POST).with2(community_names); })
+            .resource("/dyn/community/like", |r| { r.method(Method::POST).with2(community_like); })
             .resource("/api/{theme_id}", |r| { 
                 r.method(Method::GET).h(theme_and_comments); 
                 r.method(Method::POST).with2(theme_add_comment); 
             })
             .register())
             .handler("/", fs::StaticFiles::new("public")))
-        .bind("127.0.0.1:8000").unwrap()
+        .bind("127.0.0.1:8001").unwrap()
         .shutdown_timeout(2)
         .start();
 

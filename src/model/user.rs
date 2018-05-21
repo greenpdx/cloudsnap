@@ -74,12 +74,14 @@ impl Message for UserDelete {
     type Result = Result<Msgs, MyError>;
 }
 
-pub fn no_user() -> User {
-    User {
-        id: 0,
-        email: "".to_owned(),
-        username: "".to_owned(),
-        password: "".to_owned(),
-        created_at: Utc::now().naive_utc(),
+impl User {
+    pub fn new() -> User {
+        User {
+            id: 0,
+            email: "".to_owned(),
+            username: "".to_owned(),
+            password: "".to_owned(),
+            created_at: Utc::now().naive_utc(),
+        }
     }
 }

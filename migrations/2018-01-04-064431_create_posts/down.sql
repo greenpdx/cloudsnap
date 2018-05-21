@@ -1,4 +1,6 @@
 DROP TABLE users;
-DROP TABLE theme;
-DROP TABLE comment;
-DROP TABLE message;
+DROP TABLE themes;
+DROP TABLE comments;
+DROP TABLE messages;
+DROP TABLE communitys;
+DROP TABLE jonis;

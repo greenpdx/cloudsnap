@@ -4,7 +4,9 @@ import Home from '../pages/home/Home'
 import Wiki from '../pages/wiki/Wiki'
 import More from '../pages/more/More'
 import Theme from '../pages/theme/Theme'
-import New from '../pages/new/New'
+import Post from '../pages/new/Post'
+import Create from '../pages/new/Create'
+import Community from '../pages/community/Community'
 import Access from '../pages/user/Access'
 import SignUp from '../pages/user/SignUp'
 import Center from '../pages/user/Center'
@@ -18,11 +20,13 @@ export default new Router({
     { path: '/', name: 'home', component: Home },
     { path: '/a/wiki', name: 'wiki', component: Wiki },
     { path: '/a/more', name: 'more', component: More },
-    { path: '/a/theme/:id', name: 'theme', component: Theme },
-    { path: '/a/new', name: 'new', component: New },
+    { path: '/a/:community/theme/:id', name: 'theme', component: Theme },
+    { path: '/a/post', name: 'post', component: Post },
+    { path: '/a/create', name: 'create', component: Create },
     { path: '/a/access', name: 'access', component: Access },
     { path: '/a/signup', name: 'signup', component: SignUp },
     { path: '/a/user/:id', name: 'user', component: Center },
+    { path: '/a/community/:name', name: 'community', component: Community },
     { path: '/a/about', name: 'about', component: About },
     { path: '*', name: 'notfound', component: NotFound }
   ]

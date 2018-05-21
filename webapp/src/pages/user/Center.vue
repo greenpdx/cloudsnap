@@ -67,7 +67,7 @@ export default {
   },
   mounted: function() {
       if (sessionStorage.getItem('token')){
-        axios.get('http://localhost:8000/api/user_info', auth.getAuthHeader())
+        axios.get('http://localhost:8001/api/user_info', auth.getAuthHeader())
         .then((response) => {
             this.email =  response.data.current_user.email
             this.username =  response.data.current_user.username
@@ -94,7 +94,7 @@ export default {
         var newmail = this.Newmail
         var newpassword = this.Newpassword
         var confirm_newpassword = this.ConfirmNewpassword
-        axios.post('http://localhost:8000/api/user_update', {
+        axios.post('http://localhost:8001/api/user_update', {
             user_id: user_id,
             newname: newname,
             newmail: newmail,
@@ -110,7 +110,7 @@ export default {
         })
     },
     deleteme() {
-        axios.get('http://localhost:8000/api/user_delete', auth.getAuthHeader())
+        axios.get('http://localhost:8001/api/user_delete', auth.getAuthHeader())
         .then((response) => {
             sessionStorage.removeItem('token')
             sessionStorage.removeItem('signin_user')

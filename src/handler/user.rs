@@ -49,13 +49,7 @@ impl Handler<SigninUser> for ConnDsl {
         use utils::schema::users::dsl::*;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
         let login_user =  users.filter(&username.eq(&signin_user.username)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
-        let no_user = User {
-            id: 0,
-            email: "".to_owned(),
-            username: "".to_owned(),
-            password: "".to_owned(),
-            created_at: Utc::now().naive_utc(),
-        };
+        let no_user = User::new();
         match login_user {
             Some(login_user) => {
                 match verify(&signin_user.password, &login_user.password) {
@@ -122,13 +116,7 @@ impl Handler<UserInfo> for ConnDsl {
                     })
             },
             None => {
-                    let no_user = User {
-                            id: 0,
-                            email: "".to_owned(),
-                            username: "".to_owned(),
-                            password: "".to_owned(),
-                            created_at: Utc::now().naive_utc(),
-                    };
+                    let no_user = User::new();
                     Ok(UserInfoMsgs { 
                             status: 400,
                             message : "error.".to_string(),

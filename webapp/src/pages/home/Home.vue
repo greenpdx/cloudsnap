@@ -4,18 +4,17 @@
       <main>
         <div id="center">
             <div id="header">
-                  <li  id="first"><router-link to="/">All</router-link></li>
-                  <li  ><router-link to="/latest">Latest</router-link></li>
+                  <li  id="first"><router-link to="/">Best</router-link></li>
+                  <li  ><router-link to="/new">New</router-link></li>
+                  <li  ><router-link to="/hot">Hot</router-link></li>
                   <li  ><router-link to="/top">Top</router-link></li>
-                  <li  ><router-link to="/share">Share</router-link></li>
-                  <li  ><router-link to="/blog">Blog</router-link></li>
-                  <li  ><router-link to="/help">Help</router-link></li>
-                  <li  ><router-link to="/job">Job</router-link></li>
+                  <li  ><router-link to="/care">Care</router-link></li>
+                  <li  ><router-link to="/rise">Rise</router-link></li>
             </div>
             <div id="title">
                   <span id="title-topic">Theme</span>
                   <span id="right">
-                      <span id="info">Category</span>
+                      <span id="info">Community</span>
                       <span id="info">User</span>
                       <span id="info">View</span>
                       <span id="info">Reply</span>
@@ -23,11 +22,38 @@
                   </span>      
             </div>
             <div id="content">
+                <div v-if="signin_user">
+                    <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                          <div id="office" v-if="theme.community_name === 'Office'">
+                              <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                              <span id="right">
+                                  <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
+                                  <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                                  <span id="info"> {{ theme.view_count }} </span>
+                                  <span id="info"> {{ theme.comment_count }} </span>
+                                  <span > {{ theme.rtime }} </span>
+                              </span>                        
+                          </div>
+                    </div>
+                    <div id="items" v-for="(theme, index) in theme_list">
+                          <div id="item" v-if="theme.community_name !== 'Office'">
+                              <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                              <span id="right">
+                                  <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
+                                  <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                                  <span id="info"> {{ theme.view_count }} </span>
+                                  <span id="info"> {{ theme.comment_count }} </span>
+                                  <span > {{ theme.rtime }} </span>
+                              </span>
+                          </div>
+                    </div>
+                </div>
+                <div v-else>
                   <div id="items" v-for="(theme, index) in theme_list" :key="index">
-                      <div id="office" v-if="theme.category === 'Office'">
-                          <span id="office-title"><a :href="'/a/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                      <div id="office" v-if="theme.community_name === 'Office'">
+                          <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
                           <span id="right">
-                              <span id="info"> {{ theme.category }} </span>
+                              <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
                               <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
                               <span id="info"> {{ theme.view_count }} </span>
                               <span id="info"> {{ theme.comment_count }} </span>
@@ -36,10 +62,10 @@
                       </div>
                   </div>
                   <div id="items" v-for="(theme, index) in theme_list">
-                      <div id="item" v-if="theme.category !== 'Office'">
-                        <span id="item-title"><a :href="'/a/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                      <div id="item" v-if="theme.community_name !== 'Office'">
+                        <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
                         <span id="right">
-                            <span id="info"> {{ theme.category }} </span>
+                            <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
                             <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
                             <span id="info"> {{ theme.view_count }} </span>
                             <span id="info"> {{ theme.comment_count }} </span>
@@ -47,6 +73,7 @@
                         </span>
                       </div>
                   </div>
+                </div>
             </div>
         </div>
       </main>
@@ -64,21 +91,35 @@ export default {
   },
   data: function() {
     return {
-      theme_list: ''
+      theme_list: '',
+      signin_user: ''
     }
   },
   mounted: function() {
-    axios.get('http://localhost:8000/api/theme_list', auth.getAuthHeader())
-      .then((response) => {
-        this.theme_list = response.data.theme_list.reverse()
-        // this.theme_list = response.data.theme_list
-        console.log(response.data.theme_list)
-        console.log(sessionStorage.getItem('token'))
-        console.log(JSON.parse(sessionStorage.getItem('signin_user')).username)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+      if (sessionStorage.getItem('signin_user')){
+              this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
+              let signin_user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+              axios.post('http://localhost:8001/api/theme_list',{
+                user_id: signin_user_id
+              })
+              .then((response) => {
+                this.theme_list = response.data.theme_list.reverse()
+              })
+              .catch((e) => {
+                console.log(e)
+              })
+      }else{
+          let signin_user_id = 0;
+          axios.post('http://localhost:8001/api/theme_list',{
+            user_id: signin_user_id
+          })
+          .then((response) => {
+            this.theme_list = response.data.theme_list.reverse()
+          })
+          .catch((e) => {
+            console.log(e)
+          })
+      }
   }
 }
 </script>
@@ -103,7 +144,7 @@ main {
 #center #header li {
   display: inline-block;
   line-height: 50px;
-  margin-left: 5vw;
+  margin-left: 4vw;
   font-size: 1.1rem;
   font-weight: bold;
 }
@@ -135,7 +176,7 @@ main {
 }
 
 #center #content #right #info {
-  padding-right: 4.7vw;
+  padding-right: 4.4vw;
 }
 @media only screen and (max-width: 600px) {
     main{

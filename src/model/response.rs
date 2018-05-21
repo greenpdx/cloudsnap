@@ -1,6 +1,6 @@
 use model::user::User;
-use model::theme::{Comment, CommentReturn};
-use model::theme::{Theme, ThemeListResult};
+use model::theme::{ThemeListResult, Theme, CommentReturn};
+use model::community::CommunityThemeListResult;
 
 pub enum MyError {
     NotFound,
@@ -36,12 +36,36 @@ pub struct UserInfoMsgs {
 }
 
 #[derive(Deserialize,Serialize, Debug)]
-pub struct ThemeAndCommentMsgs {
+pub struct ThemeAndCommentsMsgs {
+    pub theme: Theme,
+    pub theme_user: User,
+    pub theme_community_name: String,
+    pub theme_rtime: String,
+    pub theme_comments: Vec<CommentReturn>,
+}
+
+#[derive(Deserialize,Serialize, Debug)]
+pub struct CommunityNamesMsgs {
     pub status: i32,
     pub message : String,
-    pub theme : Theme,
-    pub theme_user : User,
-    pub theme_comment: Vec<CommentReturn>,
-    pub theme_rtime: String,
+    pub community_names : Vec<String>,
 }
- 
+
+#[derive(Deserialize,Serialize, Debug)]
+pub struct CommunityThemesMsgs {
+    pub status: i32,
+    pub message : String,
+    pub community_theme_list : Vec<CommunityThemeListResult>,
+}
+
+impl ThemeAndCommentsMsgs {
+    pub fn new() -> ThemeAndCommentsMsgs {
+            ThemeAndCommentsMsgs{
+                theme: Theme::new(),
+                theme_user: User::new(),
+                theme_community_name: "".to_string(),
+                theme_rtime: "".to_string(),
+                theme_comments: vec![],
+            }
+    }
+}

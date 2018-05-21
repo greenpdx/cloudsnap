@@ -11,7 +11,8 @@
       </div>
       <div id="rnav">
           <li v-if="username"> 
-            <a href="/a/new" title="new">new</a>
+            <a href="/a/create" title="create">create</a>
+            <a href="/a/post" title="post">post</a>
             <a :href="'/a/user/' + user_id" title="username">{{username}}</a>
             <a href="/a/access" title="Logout" @click="logout">logout</a>
           </li>
