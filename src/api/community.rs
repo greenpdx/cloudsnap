@@ -2,7 +2,7 @@ use actix_web::{HttpMessage, HttpRequest, HttpResponse, State, Json, AsyncRespon
 use futures::future::Future;
 
 use api::index::AppState;
-use model::community::{CommunityNew, CommunityNames, CommunityCategorys, CommunityThemes, CommunityLike};
+use model::community::{Communitys, CommunityNew, CommunityNames, CommunityCategorys, CommunityThemes, CommunityLike};
 
 pub fn community_new(community_new: Json<CommunityNew>, state: State<AppState>) -> FutureResponse<HttpResponse> {
     state.db.send(CommunityNew{ 
@@ -34,6 +34,17 @@ pub fn community_names(community_names: Json<CommunityNames>, state: State<AppSt
 
 pub fn community_categorys(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
     req.state().db.send(CommunityCategorys)
+        .from_err()
+        .and_then(|res| {
+            match res {
+                Ok(msg) => Ok(HttpResponse::Ok().json(msg)),
+                Err(_) => Ok(HttpResponse::InternalServerError().into())
+            }
+        }).responder()
+}
+
+pub fn communitys(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
+    req.state().db.send(Communitys)
         .from_err()
         .and_then(|res| {
             match res {

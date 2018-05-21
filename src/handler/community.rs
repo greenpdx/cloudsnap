@@ -4,13 +4,13 @@ use actix::*;
 use actix_web::*;
 use chrono::Utc;
 use std::collections::HashSet;
-use model::response::{CommunityNamesMsgs, CommunityCategorysMsgs, Msgs, CommunityThemesMsgs};
+use model::response::{CommunityNamesMsgs, CommunityCategorysMsgs, CommunitysMsgs, Msgs, CommunityThemesMsgs};
 use model::db::ConnDsl;
 use model::theme::Theme;
 use model::user::User;
 use model::join::NewJoin;
 use utils::time;
-use model::community::{Community, NewCommunity, CommunityLike, CommunityNew, CommunityNames, CommunityCategorys, CommunityThemes, CommunityThemeListResult};
+use model::community::{Community, Communitys, NewCommunity, CommunityLike, CommunityNew, CommunityNames, CommunityCategorys, CommunityThemes, CommunityThemeListResult};
 
 
 impl Handler<CommunityNew> for ConnDsl {
@@ -69,6 +69,22 @@ impl Handler<CommunityCategorys> for ConnDsl {
                 status: 200,
                 message : "TypeNamesMsgs.".to_string(),
                 community_categorys: categorys_result,
+        })        
+    }
+}
+
+impl Handler<Communitys> for ConnDsl {
+    type Result = Result<CommunitysMsgs, Error>;
+
+    fn handle(&mut self, communitys: Communitys, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::communitys::dsl::*;
+        let mut categorys_list: Vec<String> = vec![];
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let community_list = communitys.load::<Community>(conn).map_err(error::ErrorInternalServerError)?;
+        Ok(CommunitysMsgs { 
+                status: 200,
+                message : "TypeNamesMsgs.".to_string(),
+                communitys: community_list,
         })        
     }
 }

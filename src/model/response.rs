@@ -1,6 +1,6 @@
 use model::user::User;
 use model::theme::{ThemeListResult, Theme, CommentReturn};
-use model::community::CommunityThemeListResult;
+use model::community::{Community, CommunityThemeListResult};
 
 pub enum MyError {
     NotFound,
@@ -56,6 +56,13 @@ pub struct CommunityCategorysMsgs {
     pub status: i32,
     pub message : String,
     pub community_categorys : Vec<String>,
+}
+
+#[derive(Deserialize,Serialize, Debug)]
+pub struct CommunitysMsgs {
+    pub status: i32,
+    pub message : String,
+    pub communitys : Vec<Community>,
 }
 
 #[derive(Deserialize,Serialize, Debug)]

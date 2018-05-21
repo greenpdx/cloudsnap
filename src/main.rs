@@ -33,7 +33,7 @@ use model::db::ConnDsl;
 use api::index::{AppState, home, path};
 use api::auth::{signup, signin};
 use api::theme::{theme_and_comments,theme_list, theme_new, theme_add_comment};
-use api::community::{community_new, community_names, community_categorys, community_theme_list, community_like};
+use api::community::{communitys, community_new, community_names, community_categorys, community_theme_list, community_like};
 use api::user::{user_info, user_delete, user_update};
 
 fn main() {
@@ -61,8 +61,9 @@ fn main() {
             .resource("/api/user_delete", |r| { r.method(Method::GET).h(user_delete); })
             .resource("/api/user_update", |r| { r.method(Method::POST).with2(user_update); })
             .resource("/api/theme_list", |r| { r.method(Method::POST).with2(theme_list); })
-            .resource("/api/community/{community_name}", |r| { r.method(Method::GET).h(community_theme_list); })
             .resource("/api/theme_new", |r| { r.method(Method::POST).with2(theme_new); })
+            .resource("/api/community/{community_name}", |r| { r.method(Method::GET).h(community_theme_list); })
+            .resource("/api/communitys", |r| { r.method(Method::GET).h(communitys); })
             .resource("/api/community_new", |r| { r.method(Method::POST).with2(community_new); })
             .resource("/api/community_names", |r| { r.method(Method::POST).with2(community_names); })
             .resource("/api/community_categorys", |r| { r.method(Method::GET).h(community_categorys); })
@@ -73,7 +74,7 @@ fn main() {
             })
             .register())
             .handler("/", fs::StaticFiles::new("public")))
-        .bind("127.0.0.1:8000").unwrap()
+        .bind("127.0.0.1:8001").unwrap()
         .shutdown_timeout(3)
         .start();
 

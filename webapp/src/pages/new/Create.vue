@@ -39,7 +39,7 @@ export default {
         }
     },
     mounted: function() {
-        axios.get('http://localhost:8000/api/community_categorys')
+        axios.get('http://localhost:8001/api/community_categorys')
         .then((response) => {
             this.community_categorys = response.data.community_categorys
             console.log(response.data.community_categorys)
@@ -56,7 +56,7 @@ export default {
             console.log(community_category)
             console.log(community_name)
             console.log(user_id)
-            axios.post('http://localhost:8000/api/community_new', {
+            axios.post('http://localhost:8001/api/community_new', {
                 community_category: community_category,
                 create_user_id: user_id,
                 community_name: community_name
