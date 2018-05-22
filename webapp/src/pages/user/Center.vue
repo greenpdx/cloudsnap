@@ -5,14 +5,19 @@
       <div id="title">
           <ul>
               <li>Topic</li>
-              <li>Comment</li>
-              <li>Message</li>
-              <li>Save</li>
+              <li id="item">Comment</li>
+              <li id="item">Message</li>
+              <li id="item">Save</li>
           </ul>
       </div>
       <div id="body">
         <div id="container">
             <div id="left">
+                <p>My Topic</p>
+                <p>My Comment</p>
+                <p>My Message</p>
+            </div>
+            <div id="right">
                 <p><strong>{{ username }}</strong></p>
                 <p><strong>{{ email }}</strong></p>
                 <p>created_time : {{ created_time }}</p>
@@ -29,11 +34,6 @@
                     <input type="password" name="confirm_newpassword" placeholder="Confirm Newpassword" v-model="ConfirmNewpassword"  required/><br/>
                     <button id="submit" @click="submitnow">UpdateNow</button>
               </div>
-            </div>
-            <div id="right">
-                <p>My Topic</p>
-                <p>My Comment</p>
-                <p>My Message</p>
             </div>
         </div>
         
@@ -164,21 +164,23 @@ button {
       padding-top: 6rem;
   }
   img {
-      margin-left: 14%;
+      margin-left: 10vw;
       width: 8rem;
       height: 8rem;
   }
   #title ul {
-      margin-left: 33%;
+      margin-left: 10vw;
   }
   #title ul li {
       display: inline-block;
-      padding-left: 2rem;
       font-weight: bold;
+  }
+  #title ul #item {
+      padding-left: 2rem;
   }
   #body  {
       margin: 0 auto;
-      width: 72%;
+      width: 80%;
       padding-top: 2rem;
   }
   #body #container {
@@ -186,7 +188,7 @@ button {
     flex-flow: row;
   }
   #body #container #left {
-      width: 33%;
+      width: 80%;
       padding-right: 1rem;
   }
   #body #container #right {
@@ -201,21 +203,23 @@ button {
       padding-top: 6rem;
   }
   img {
-      margin-left: 17%;
+      margin-left: 14vw;
       width: 8rem;
       height: 8rem;
   }
   #title ul {
-      margin-left: 33vw;
+      margin-left: 14vw;
   }
   #title ul li {
       display: inline-block;
-      padding-left: 2rem;
       font-weight: bold;
+  }
+  #title ul #item {
+      padding-left: 2rem;
   }
   #body  {
       margin: 0 auto;
-      width: 66%;
+      width: 72%;
       padding-top: 2rem;
   }
 
@@ -224,10 +228,10 @@ button {
     flex-flow: row;
   }
   #body #container #left {
-      width: 29%;
+      width: 80%;
       padding-right: 1rem;
   }
-   #body #container #left p, #body #container #left button {
+  #body #container #left p, #body #container #left button {
       margin-bottom: 0.4rem;
   }
   #body #container #right {

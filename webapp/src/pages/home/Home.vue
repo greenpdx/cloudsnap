@@ -2,79 +2,91 @@
   <div id="home">
       <mnav id="mnav"></mnav>
       <main>
-        <div id="center">
-            <div id="header">
-                  <li  id="first"><router-link to="/">Best</router-link></li>
-                  <li  ><router-link to="/new">New</router-link></li>
-                  <li  ><router-link to="/hot">Hot</router-link></li>
-                  <li  ><router-link to="/top">Top</router-link></li>
-                  <li  ><router-link to="/care">Care</router-link></li>
-                  <li  ><router-link to="/rise">Rise</router-link></li>
-            </div>
-            <div id="title">
-                  <span id="title-topic">Theme</span>
-                  <span id="right">
-                      <span id="info">Community</span>
-                      <span id="info">User</span>
-                      <span id="info">View</span>
-                      <span id="info">Reply</span>
-                      <span>Activity</span>
-                  </span>      
-            </div>
-            <div id="content">
-                <div v-if="signin_user">
+        <div id="container">
+          <div id="center">
+              <div id="header">
+                    <li  id="first"><router-link to="/">Best</router-link></li>
+                    <li  ><router-link to="/new">New</router-link></li>
+                    <li  ><router-link to="/hot">Hot</router-link></li>
+                    <li  ><router-link to="/top">Top</router-link></li>
+                    <li  ><router-link to="/care">Care</router-link></li>
+                    <li  ><router-link to="/rise">Rise</router-link></li>
+              </div>
+              <div id="title">
+                    <span id="title-topic">Theme</span>
+                    <span id="right">
+                        <span id="info">Community</span>
+                        <span id="info">User</span>
+                        <span id="info">View</span>
+                        <span id="info">Reply</span>
+                        <span>Activity</span>
+                    </span>      
+              </div>
+              <div id="content">
+                  <div v-if="signin_user">
+                      <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                            <div id="office" v-if="theme.community_name === 'Office'">
+                                <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                                <span id="right">
+                                    <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
+                                    <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                                    <span id="info"> {{ theme.view_count }} </span>
+                                    <span id="info"> {{ theme.comment_count }} </span>
+                                    <span > {{ theme.rtime }} </span>
+                                </span>                        
+                            </div>
+                      </div>
+                      <div id="items" v-for="(theme, index) in theme_list">
+                            <div id="item" v-if="theme.community_name !== 'Office'">
+                                <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                                <span id="right">
+                                    <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
+                                    <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                                    <span id="info"> {{ theme.view_count }} </span>
+                                    <span id="info"> {{ theme.comment_count }} </span>
+                                    <span > {{ theme.rtime }} </span>
+                                </span>
+                            </div>
+                      </div>
+                  </div>
+                  <div v-else>
                     <div id="items" v-for="(theme, index) in theme_list" :key="index">
-                          <div id="office" v-if="theme.community_name === 'Office'">
-                              <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
-                              <span id="right">
-                                  <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
-                                  <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                                  <span id="info"> {{ theme.view_count }} </span>
-                                  <span id="info"> {{ theme.comment_count }} </span>
-                                  <span > {{ theme.rtime }} </span>
-                              </span>                        
-                          </div>
+                        <div id="office" v-if="theme.community_name === 'Office'">
+                            <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                            <span id="right">
+                                <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
+                                <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
+                                <span id="info"> {{ theme.view_count }} </span>
+                                <span id="info"> {{ theme.comment_count }} </span>
+                                <span > {{ theme.rtime }} </span>
+                            </span>                        
+                        </div>
                     </div>
                     <div id="items" v-for="(theme, index) in theme_list">
-                          <div id="item" v-if="theme.community_name !== 'Office'">
-                              <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
-                              <span id="right">
-                                  <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
-                                  <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                                  <span id="info"> {{ theme.view_count }} </span>
-                                  <span id="info"> {{ theme.comment_count }} </span>
-                                  <span > {{ theme.rtime }} </span>
-                              </span>
-                          </div>
-                    </div>
-                </div>
-                <div v-else>
-                  <div id="items" v-for="(theme, index) in theme_list" :key="index">
-                      <div id="office" v-if="theme.community_name === 'Office'">
-                          <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
+                        <div id="item" v-if="theme.community_name !== 'Office'">
+                          <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
                           <span id="right">
                               <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
                               <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
                               <span id="info"> {{ theme.view_count }} </span>
                               <span id="info"> {{ theme.comment_count }} </span>
                               <span > {{ theme.rtime }} </span>
-                          </span>                        
-                      </div>
+                          </span>
+                        </div>
+                    </div>
                   </div>
-                  <div id="items" v-for="(theme, index) in theme_list">
-                      <div id="item" v-if="theme.community_name !== 'Office'">
-                        <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
-                        <span id="right">
-                            <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
-                            <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                            <span id="info"> {{ theme.view_count }} </span>
-                            <span id="info"> {{ theme.comment_count }} </span>
-                            <span > {{ theme.rtime }} </span>
-                        </span>
-                      </div>
-                  </div>
+              </div>
+          </div>
+          <div id="aside">
+                <div id="one">
+                        <h3>What</h3>
+                        <p>Chania is a city on the island of Crete.</p>
+                        <h3>Where</h3>
+                        <p>Crete is a Greek island in the Mediterranean Sea.</p>
+                        <h3>How</h3>
+                        <p>You can reach Chania airport from all over Europe.</p>
                 </div>
-            </div>
+          </div>
         </div>
       </main>
   </div>
@@ -200,8 +212,24 @@ main {
 @media only screen and (min-width: 1000px) {
     main {
         margin: 0 auto;
-        width: 70%;
+        width: 72%;
         padding-top: 77px;
     }
+    #container {
+      display: flex;
+      flex-flow: row;
+    }
+    #container #center {
+        width: 80%;
+        margin-right: 1rem;
+    }
+    #container #aside {
+        flex: 1;
+    }
+    #container #aside #one{
+        padding: 1rem;
+        border: 1px solid rgb(212, 212, 212);
+    }
 }
+        
 </style>

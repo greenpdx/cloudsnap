@@ -6,7 +6,7 @@
             <div id="topic-group">
                     <span  id="category">
                             <select name="community_category" v-model="CommunityCategory" id="category-control" >
-                                <option value="fruit">fruit<span class="icon-arrow"></span></option>
+                                <option value="muro">muro<span class="icon-arrow"></span></option>
                                 <option v-bind:value="community_category" v-for="(community_category, index) in community_categorys" :key="index">
                                         {{community_category}}
                                 </option>
