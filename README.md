@@ -26,7 +26,7 @@ $ cargo install diesel_cli --no-default-features --features postgres
 $ diesel setup
 $ cargo run
 
-// another shell  nodejs(v8.9.4 on my machine)
+// another shell  nodejs(v10.1.0 on my machine)
 
 $ cd muro/webapp
 $ npm install
