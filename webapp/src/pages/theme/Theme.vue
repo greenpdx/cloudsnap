@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
