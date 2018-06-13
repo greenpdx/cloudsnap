@@ -23,7 +23,6 @@
                     </span>      
               </div>
               <div id="content">
-                  <div v-if="signin_user">
                       <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="office" v-if="theme.community_name === 'Office'">
                                 <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
@@ -48,33 +47,6 @@
                                 </span>
                             </div>
                       </div>
-                  </div>
-                  <div v-else>
-                    <div id="items" v-for="(theme, index) in theme_list" :key="index">
-                        <div id="office" v-if="theme.community_name === 'Office'">
-                            <span id="office-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
-                            <span id="right">
-                                <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
-                                <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                                <span id="info"> {{ theme.view_count }} </span>
-                                <span id="info"> {{ theme.comment_count }} </span>
-                                <span > {{ theme.rtime }} </span>
-                            </span>                        
-                        </div>
-                    </div>
-                    <div id="items" v-for="(theme, index) in theme_list">
-                        <div id="item" v-if="theme.community_name !== 'Office'">
-                          <span id="item-title"><a :href="'/a/'+ theme.community_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a></span>
-                          <span id="right">
-                              <span id="info"><a :href="'/a/community/' + theme.community_name">  {{ theme.community_name }} </a></span>
-                              <span id="info"><a :href="'/a/user/' + theme.user_id"> {{ theme.username }} </a></span>
-                              <span id="info"> {{ theme.view_count }} </span>
-                              <span id="info"> {{ theme.comment_count }} </span>
-                              <span > {{ theme.rtime }} </span>
-                          </span>
-                        </div>
-                    </div>
-                  </div>
               </div>
           </div>
           <div id="aside">

@@ -6,7 +6,7 @@
             <form id="form" >
                     <div id="topic-group">
                         <span  id="category">
-                                <select v-if="username" name="community_name" v-model="CommunityName" id="category-control" >
+                                <select v-if="username == 'admin'" name="community_name" v-model="CommunityName" id="category-control" >
                                     <option value="muro">muro<span class="icon-arrow"></span></option>
                                     <option value="office">Office</option>
                                     <option v-bind:value="community_name" v-for="(community_name, index) in community_names" :key="index">
@@ -45,6 +45,7 @@ export default {
     },
     data () {
         return {
+            username: '',
             community_names: '',
             CommunityName: '',
             Title: '',
@@ -52,6 +53,8 @@ export default {
         }
     },
     mounted: function() {
+        var signin_username = JSON.parse(sessionStorage.getItem('signin_user')).username
+        this.username = signin_username
         var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
         axios.post('http://localhost:8001/api/community_names',{
             create_user_id: user_id
