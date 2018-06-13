@@ -47,7 +47,7 @@ $ npm run build
 $ cd ..
 $ cargo run
 ```
-then open broswer 'http://localhost:8001/'
+then open broswer 'http://localhost:8000/'
 
 ### <a name="screenshots"> What it looks like </a>
 
