@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
     name: 'post',
@@ -56,16 +56,23 @@ export default {
         var signin_username = JSON.parse(sessionStorage.getItem('signin_user')).username
         this.username = signin_username
         var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-        axios.post('http://localhost:8001/api/community_names',{
+        let data = { 
             create_user_id: user_id
-        })
-        .then((response) => {
-            this.community_names = response.data.community_names
-            console.log(response.data.community_names)
-        })
-        .catch((e) => {
-            console.log(e)
-        })
+        }
+              fetch(URLprefix + 'api/community_names', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                    console.log(json)
+                    this.community_names = json.community_names
+              })
+              .catch((e) => {
+                console.log(e)
+              })
     },
     methods: {
         post() {
@@ -73,19 +80,26 @@ export default {
             var title = this.Title
             var content = this.Content
             var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-            axios.post('http://localhost:8001/api/theme_new', {
+            let data = { 
                 user_id: user_id,
                 community_name: community_name,
                 title: title,
                 content: content
-            })
-            .then(response => {
-                window.location.reload ( true )
-                this.$router.push('/a/community/community_name')
-            })
-            .catch(e => {
+            }
+            fetch(URLprefix + 'api/theme_new', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                    window.location.reload ( true )
+                    this.$router.push('/a/community/community_name')
+              })
+              .catch((e) => {
                 console.log(e)
-            })
+              })
         }
     }
 }

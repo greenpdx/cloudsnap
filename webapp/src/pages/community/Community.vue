@@ -47,6 +47,7 @@
 
 <script>
 import axios from 'axios'
+import URLprefix from '../../config'
 import auth from '../../utils/auth'
 import Mnav from '../../components/nav/Mnav'
 export default {
@@ -64,11 +65,12 @@ export default {
   mounted: function() {
     this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
     this.community_name = this.$route.params.name
-    axios.get("http://localhost:8001/api/community/" + this.$route.params.name)
-      .then((response) => {
-        this.community_theme_list = response.data.community_theme_list.reverse()
-      })
-      .catch((e) => {
+      fetch(URLprefix + 'api/community/'+ this.$route.params.name,{
+          method: 'GET',
+      }).then(response => response.json())
+      .then(json => {
+            this.community_theme_list = json.community_theme_list.reverse()
+      }).catch((e) => {
         console.log(e)
       })
   },
@@ -76,16 +78,23 @@ export default {
     like() {
         let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
         let community_name = this.$route.params.name
-        axios.post("http://localhost:8001/dyn/community/like", {
-            user_id: user_id,
-            community_name: community_name
-        })
-          .then((response) => {
-            console.log(response.data.message)
-          })
-          .catch((e) => {
-            console.log(e)
-          })
+        let data = { 
+          user_id: user_id,
+          community_name: community_name
+        }
+              fetch(URLprefix + 'dyn/community/like', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                  console.log(json)
+              })
+              .catch((e) => {
+                console.log(e)
+              })
     }
   }
 }

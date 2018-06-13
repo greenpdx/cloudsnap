@@ -45,6 +45,7 @@
 
 <script>
 import axios from 'axios'
+import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
     name: 'theme',
@@ -65,21 +66,16 @@ export default {
         if (sessionStorage.getItem('signin_user')){
             this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
         }
-        axios.get("http://localhost:8001/api/" + this.$route.params.id)
-        .then((response) => {
-            this.theme = response.data.theme
-            this.theme_user = response.data.theme_user
-            this.theme_rtime = response.data.theme_rtime
-            this.theme_community_name = response.data.theme_community_name
-            this.theme_comments = response.data.theme_comments
-            console.log(response.data)
-            console.log(response.data.theme)
-            console.log(response.data.theme_user)
-            console.log(response.data.theme_rtime)
-            console.log(response.data.theme_community_name)
-            console.log(response.data.theme_comments)
-        })
-        .catch((e) => {
+        fetch(URLprefix + 'api/'+ this.$route.params.id,{
+            method: 'GET',
+        }).then(response => response.json())
+        .then(json => {
+            this.theme = json.theme
+            this.theme_user = json.theme_user
+            this.theme_rtime = json.theme_rtime
+            this.theme_community_name = json.theme_community_name
+            this.theme_comments = json.theme_comments
+        }).catch((e) => {
             console.log(e)
         })
   },
@@ -88,18 +84,25 @@ export default {
       let comment = this.Textarea
       let theme_id = this.$route.params.id
       let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-      axios.post("http://localhost:8001/api/" + this.$route.params.id, {
+      let data = {
           the_theme_id: theme_id,
           user_id: user_id,
           comment: comment
-      })
-      .then((response) => {
-        console.log(response.data.message)
-        window.location.reload ( true )
-      })
-      .catch((e) => {theme_comment
-        console.log(e)
-      })
+      }
+              fetch(URLprefix + 'api/' + this.$route.params.id, {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                  console.log(json)
+                  window.location.reload ( true )
+              })
+              .catch((e) => {
+                console.log(e)
+              })
     }
   }
 }

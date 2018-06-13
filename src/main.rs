@@ -74,8 +74,8 @@ fn main() {
             })
             .register())
             .handler("/", fs::StaticFiles::new("public")))
-        .bind("127.0.0.1:8001").unwrap()
-        .shutdown_timeout(3)
+        .bind("127.0.0.1:8000").unwrap()
+        .shutdown_timeout(0)
         .start();
 
     sys.run();

@@ -46,6 +46,7 @@
 
 <script>
 import axios from 'axios'
+import URLprefix from '../../config'
 import auth from '../../utils/auth'
 import Mnav from '../../components/nav/Mnav'
 export default {
@@ -67,17 +68,19 @@ export default {
   },
   mounted: function() {
       if (sessionStorage.getItem('token')){
-        axios.get('http://localhost:8001/api/user_info', auth.getAuthHeader())
-        .then((response) => {
-            this.email =  response.data.current_user.email
-            this.username =  response.data.current_user.username
-            this.created_time =  response.data.current_user.created_at
-            console.log(response.data.current_user)
-            console.log(response.data.current_user.email)
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+        fetch(URLprefix + 'api/user_info',{
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+            },
+            method: 'GET',
+        }).then(response => response.json())
+        .then(json => {
+            this.email =  json.current_user.email
+            this.username =  json.current_user.username
+            this.created_time =  json.current_user.created_at
+        }).catch((e) => {
+            console.log(e)
+        }) 
       }
   },
   methods: {
@@ -94,33 +97,43 @@ export default {
         var newmail = this.Newmail
         var newpassword = this.Newpassword
         var confirm_newpassword = this.ConfirmNewpassword
-        axios.post('http://localhost:8001/api/user_update', {
+        let data = { 
             user_id: user_id,
             newname: newname,
             newmail: newmail,
             newpassword: newpassword,
             confirm_newpassword: confirm_newpassword
-        })
-        .then(response => {
-          this.userupdate = false
-          window.location.reload ( true )
-        })
-        .catch(e => {
-          console.log(e)
-        })
+        }
+              fetch(URLprefix + 'api/user_update', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                    this.userupdate = false
+                    window.location.reload ( true )
+              })
+              .catch((e) => {
+                console.log(e)
+              })
     },
     deleteme() {
-        axios.get('http://localhost:8001/api/user_delete', auth.getAuthHeader())
-        .then((response) => {
+        fetch(URLprefix + 'api/user_delete',{
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+            },
+            method: 'GET',
+        }).then(response => response.json())
+        .then(json => {
             sessionStorage.removeItem('token')
             sessionStorage.removeItem('signin_user')
             window.location.reload ( true ); 
             this.$router.push('/')
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-        
+        }).catch((e) => {
+            console.log(e)
+        })    
     }
   }
 }

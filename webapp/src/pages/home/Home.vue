@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import URLprefix from '../../config'
 import auth from '../../utils/auth'
 import Mnav from '../../components/nav/Mnav'
 export default {
@@ -83,26 +83,38 @@ export default {
       if (sessionStorage.getItem('signin_user')){
               this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
               let signin_user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-              axios.post('http://localhost:8001/api/theme_list',{
-                user_id: signin_user_id
-              })
-              .then((response) => {
-                this.theme_list = response.data.theme_list.reverse()
+              var data = { user_id: signin_user_id }
+              fetch('http://localhost:8000/api/theme_list',{
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                  this.theme_list = json.theme_list.reverse()
+                  console.log(json)
               })
               .catch((e) => {
                 console.log(e)
               })
       }else{
-          let signin_user_id = 0;
-          axios.post('http://localhost:8001/api/theme_list',{
-            user_id: signin_user_id
-          })
-          .then((response) => {
-            this.theme_list = response.data.theme_list.reverse()
-          })
-          .catch((e) => {
-            console.log(e)
-          })
+          let signin_user_id = 0
+          let data = { user_id: signin_user_id }
+          fetch('http://localhost:8000/api/theme_list',{
+                body: JSON.stringify(data),  
+                headers: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                  this.theme_list = json.theme_list.reverse()
+                  console.log(json)
+              })
+              .catch((e) => {
+                console.log(e)
+              })
       }
   }
 }

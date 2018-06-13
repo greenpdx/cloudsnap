@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
   name: 'access',
@@ -42,22 +42,26 @@ export default {
     signin () {
       var username = this.Username
       var password = this.Password
-
-      axios.post('http://localhost:8001/user/signin', {
+      let data = { 
           username: username,
           password: password
-      })
-      .then((response) => {
-        sessionStorage.setItem('token',response.data.token);
-        sessionStorage.setItem('signin_user',JSON.stringify(response.data.signin_user));
-        console.log(response.data.token);
-        console.log(JSON.parse(sessionStorage.getItem('signin_user')).usernmae)
-        window.location.reload ( true ); 
-        this.$router.push('/')
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+      }
+            fetch(URLprefix + 'user/signin', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                    sessionStorage.setItem('token',json.token);
+                    sessionStorage.setItem('signin_user',JSON.stringify(json.signin_user));
+                    window.location.reload ( true ); 
+                    this.$router.push('/')
+              })
+              .catch((e) => {
+                console.log(e)
+              })
     }
   }
 }

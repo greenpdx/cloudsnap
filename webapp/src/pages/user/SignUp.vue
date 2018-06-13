@@ -24,6 +24,7 @@
 
 <script>
 import axios from 'axios'
+import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
   name: 'access',
@@ -44,21 +45,26 @@ export default {
       var email = this.Email
       var password = this.Password
       var confirm_password = this.ConfirmPassword
-      axios.post('http://localhost:8001/user/signup', {
+      let data = { 
           username: username,
           email: email,
           password: password,
           confirm_password: confirm_password
-      })
-      .then(response => {
-        // console.log(response.data)
-        window.location.reload ( true )
-        this.$router.push('/a/access')
-      })
-      .catch(e => {
-        console.log(e)
-      })
-      
+      }
+      fetch(URLprefix + 'user/signup', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                  window.location.reload ( true )
+                  this.$router.push('/a/access')
+              })
+              .catch((e) => {
+                console.log(e)
+              })
     }
   }
 }

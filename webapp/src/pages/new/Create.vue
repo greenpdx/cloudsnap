@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
     name: 'create',
@@ -39,12 +39,12 @@ export default {
         }
     },
     mounted: function() {
-        axios.get('http://localhost:8001/api/community_categorys')
-        .then((response) => {
-            this.community_categorys = response.data.community_categorys
-            console.log(response.data.community_categorys)
-        })
-        .catch((e) => {
+        fetch(URLprefix + 'api/community_categorys',{
+            method: 'GET',
+        }).then(response => response.json())
+        .then(json => {
+                this.community_categorys = json.community_categorys
+        }).catch((e) => {
             console.log(e)
         })
     },
@@ -53,21 +53,25 @@ export default {
             var community_category = this.CommunityCategory
             var community_name = this.CommunityNmae
             var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-            console.log(community_category)
-            console.log(community_name)
-            console.log(user_id)
-            axios.post('http://localhost:8001/api/community_new', {
+            let data = { 
                 community_category: community_category,
                 create_user_id: user_id,
                 community_name: community_name
-            })
-            .then(response => {
-                window.location.reload ( true )
-                this.$router.push("/a/community/"+ community_name)
-            })
-            .catch(e => {
+            }
+              fetch(URLprefix + 'api/community_new', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+              }).then(response => response.json())
+              .then(json => {
+                    window.location.reload ( true )
+                    this.$router.push("/a/community/"+ community_name)
+              })
+              .catch((e) => {
                 console.log(e)
-            })
+              })
         }
     }
 }

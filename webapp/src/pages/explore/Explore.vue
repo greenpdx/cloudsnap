@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
   name: 'explore',
@@ -39,23 +39,23 @@ export default {
     }
   },
   mounted: function() {
-    axios.get("http://localhost:8001/api/communitys")
-      .then((response) => {
-        this.communitys = response.data.communitys
-        console.log(response.data.communitys)
-        let community_category_result = {}
-        for (let index = 0; index < response.data.communitys.length; index++) {
-          community_category_result[response.data.communitys[index].community_category] = response.data.communitys[index].community_category
-        }
-        let community_category_list = new Array(); 
-        for(var key in community_category_result){ 
-            community_category_list.push(key); 
-        } 
-        this.community_category_list = community_category_list
-        console.log(community_category_list)
-        
-      })
-      .catch((e) => {
+      fetch(URLprefix + 'api/communitys',{
+          method: 'GET',
+      }).then(response => response.json())
+      .then(json => {
+            this.communitys = json.communitys
+            console.log(json.communitys)
+            let community_category_result = {}
+            for (let index = 0; index < json.communitys.length; index++) {
+            community_category_result[json.communitys[index].community_category] = json.communitys[index].community_category
+            }
+            let community_category_list = new Array(); 
+            for(var key in community_category_result){ 
+                community_category_list.push(key); 
+            } 
+            this.community_category_list = community_category_list
+            console.log(community_category_list)
+      }).catch((e) => {
         console.log(e)
       })
   }
