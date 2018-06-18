@@ -53,7 +53,7 @@ export default {
         }
     },
     mounted: function() {
-        var signin_username = JSON.parse(sessionStorage.getItem('signin_user')).username
+        var username = JSON.parse(sessionStorage.getItem('signin_user')).username
         this.username = signin_username
         var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
         let data = { 

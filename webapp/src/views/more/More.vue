@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Mnav from '../../components/nav/Mnav'
 export default {
     name: 'more',

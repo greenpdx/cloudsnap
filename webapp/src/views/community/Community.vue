@@ -68,6 +68,7 @@ export default {
           method: 'GET',
       }).then(response => response.json())
       .then(json => {
+            console.log(json)
             this.community_theme_list = json.community_theme_list.reverse()
       }).catch((e) => {
         console.log(e)

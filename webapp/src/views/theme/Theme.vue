@@ -53,6 +53,7 @@ export default {
     },
     data: function() {
         return {
+            Textarea: '',
             theme: '',
             theme_user: '',
             theme_community_name: '',

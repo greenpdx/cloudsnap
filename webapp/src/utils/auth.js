@@ -3,9 +3,6 @@ export default {
 		authenticated: false,
 		role: null
     }, 
-    mounted() {
-        checkAuth()
-    },
     checkAuth() {
 		var jwt = sessionStorage.getItem('token');
 		var role = sessionStorage.getItem('signin_user');
