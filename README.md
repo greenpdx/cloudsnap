@@ -30,7 +30,7 @@ $ cargo run
 
 $ cd muro/webapp
 $ npm install
-$ npm run dev
+$ npm run serve
 ```
 then open browser 'http://localhost:1234/'
 
