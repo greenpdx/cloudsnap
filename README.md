@@ -32,7 +32,7 @@ $ cd muro/webapp
 $ npm install
 $ npm run serve
 ```
-then open browser 'http://localhost:1234/'
+then open browser 'http://localhost:8080'
 
 ## when production
 
