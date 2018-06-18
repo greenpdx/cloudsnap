@@ -7,7 +7,7 @@ muro is single page webapp written in [actix-web](https://github.com/actix/actix
 - Async stable Actix-web framework 
 - diesel, postgresql r2d2
 - SPA CORS JWT
-- Vuejs Parcel-bundler
+- Vuejs
 
 ## How To
     first create a name 'muro' postgresql database for this project.
